@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/login.css">
+    <script src="./assets/js/script.js" defer></script>
+    <title>IntegraVet | Login</title>
+</head>
+
+<body>
+    <header class="cabecalho">
+        <nav class="cabecalho_nav">
+            <picture class="cabecalho_logo">
+                <img src="assets/img/I.png" alt="Logotipo da marca IntegraVet">
+            </picture>
+            <ul class="cabecalho_lista">
+                <li class="lista_item">
+                    <a href="./index.html">Início</a>
+                </li>
+                <li class="lista_item">
+                    <a href="./quemsomos.html">Quem somos</a>
+                </li>
+                <li class="lista_item">
+                    <a href="#rodape">Contato</a>
+                </li>
+                <li class="lista_item">
+                    <a href="./login.html">LOGIN</a>
+                </li>
+            </ul>
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
+                <ul id="myDropdown" class="dropdown-content">
+                    <a href="./index.html" class="item-nav">Ínicio</a>
+                    <a href="./quemsomos.html">Quem somos</a>
+                    <a href="#rodape" class="item-nav">Contato</a>
+                    <a href="./login.html" class="item-nav">Login</a>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <form action="" method="post">
+                <div class="cabecalho_form">
+                    <h1>Login</h1>
+                    <span></span>
+                </div>
+                <div class="inputs">
+                    <div class="input-field">
+                        <label for="">Email</label>
+                        <input type="email" name="" id="">
+                    </div>
+                    <div class="input-field">
+                        <label for="">Senha</label>
+                        <input type="password" name="" id="">
+                    </div>
+                </div>
+                <button type="submit">ENTRAR</button>
+                <div class="form__opcoes">
+                    <a href="#">Esqueceu sua senha?</a>
+                    <a href="./cadastro.html">Cadastre-se</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>
