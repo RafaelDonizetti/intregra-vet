@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 const path = require('path')
 const bcrypt = require('bcryptjs')
+const { error } = require('console')
 
 const app = express()
 
@@ -41,21 +42,32 @@ app.get('/cadastro', (req, res) => {
 });
 
 // Rota para inserir usuário
-app.post('/cadastro', async(req, res) => {
+app.post('/cadastro', (req, res) => {
     const { email, password } = req.body;
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-    console.log(hashedPassword)
+    //vericando se o emial já existe
+    connection.query('SELECT * FROM users WHERE email = ?', [email], async(error, results) => {
+        if (error) throw error
 
-    // criação de usiário
-    connection.query('INSERT INTO users (email, senha) VALUES (?, ?)', [email, hashedPassword], (error, results) => {
-        if (error) {
-            console.log(error.message);
-            res.send('Erro ao adicionar usuário.');
+        if (results.length > 0) {
+            return res.send('E-mail já existente')
         } else {
-            res.send('Usuário adicionado com sucesso!');
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+            console.log(hashedPassword)
+
+            // criação de usiário
+            connection.query('INSERT INTO users (email, senha) VALUES (?, ?)', [email, hashedPassword], (error, results) => {
+                if (error) {
+                    console.log(error.message);
+                    res.send('Erro ao adicionar usuário.');
+                } else {
+                    res.send('Usuário adicionado com sucesso!');
+                }
+
+            });
         }
-    });
+    })
+
 });
 
 // login
