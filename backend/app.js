@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')))
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Guitarhero90@',
+    password: 'guitarhero90@',
     database: 'test'
 });
 
@@ -43,7 +43,16 @@ app.get('/cadastro', (req, res) => {
 
 // Rota para inserir usuário
 app.post('/cadastro', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, emailConfirm, passwordConfirm } = req.body;
+
+    if (email !== emailConfirm) {
+        return res.send('email nao confere')
+
+    } else {
+        if (password !== passwordConfirm) {
+            window.confirm('senha nao confere')
+        }
+    }
     //vericando se o emial já existe
     connection.query('SELECT * FROM users WHERE email = ?', [email], async(error, results) => {
         if (error) throw error
@@ -67,8 +76,7 @@ app.post('/cadastro', (req, res) => {
             });
         }
     })
-
-});
+})
 
 // login
 app.post('/login', (req, res) => {
@@ -93,4 +101,4 @@ app.post('/login', (req, res) => {
 
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
-});
+})
