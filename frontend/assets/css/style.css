@@ -70,7 +70,7 @@ body {
     background-size: 100% 4px;
 }
 
-.lista_item:nth-child(4) a {
+.lista_item:nth-child(5) a {
     padding: 10px 16px;
     background-color: #F5BB00;
     border-radius: 4px;
