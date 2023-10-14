@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
@@ -10,10 +11,10 @@ const app = express()
 app.use(express.static(path.join(__dirname, '..', 'frontend')))
     // Conexão MySQL
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'guitarhero90@',
-    database: 'test'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 connection.connect(err => {
@@ -46,11 +47,11 @@ app.post('/cadastro', (req, res) => {
     const { email, password, emailConfirm, passwordConfirm } = req.body;
 
     if (email !== emailConfirm) {
-        return res.send('email nao confere')
+        return res.send('Os E-mail não estão igauis')
 
     } else {
         if (password !== passwordConfirm) {
-            window.confirm('senha nao confere')
+            return res.send('As senhas não estão igauis')
         }
     }
     //vericando se o emial já existe
