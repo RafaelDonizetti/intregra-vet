@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/cadastro.css">
     <script src="./assets/js/script.js" defer></script>
+    <script src="assets/js/cadastro.js" defer></script>
     <title>IntegraVet | Cadastro</title>
 </head>
 
@@ -17,25 +18,29 @@
             </picture>
             <ul class="cabecalho_lista">
                 <li class="lista_item">
-                    <a href="./index.html">Início</a>
+                    <a href="/">Início</a>
                 </li>
                 <li class="lista_item">
-                    <a href="./quemsomos.html">Quem somos</a>
+                    <a href="/quemsomos">Quem somos</a>
                 </li>
                 <li class="lista_item">
                     <a href="#rodape">Contato</a>
                 </li>
                 <li class="lista_item">
-                    <a href="./login.html">LOGIN</a>
+                    <a href="#">Projetos</a>
+                </li>
+                <li class="lista_item">
+                    <a href="/login">LOGIN</a>
                 </li>
             </ul>
             <div class="dropdown">
                 <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                 <ul id="myDropdown" class="dropdown-content">
-                    <a href="./index.html" class="item-nav">Ínicio</a>
-                    <a href="./quemsomos.html">Quem somos</a>
+                    <a href="./index" class="item-nav">Ínicio</a>
+                    <a href="./quemsomos">Quem somos</a>
                     <a href="#rodape" class="item-nav">Contato</a>
-                    <a href="./login.html" class="item-nav">Login</a>
+                    <a href="/projetos">Projetos</a>
+                    <a href="./login" class="item-nav">Login</a>
                 </ul>
             </div>
         </nav>
@@ -43,47 +48,47 @@
 
     <main>
         <section>
-            <form action="" method="post">
+            <form action="/cadastro" method="post" >
                 <div class="cabecalho_form">
                     <h1>Cadastro</h1>
                     <span></span>
                 </div>
                 <div class="inputs">
                     <div class="input-field">
-                        <label for="">Email</label>
-                        <input type="email" name="email" id="">
+                        <label for="">Nome completo</label>
+                        <input type="text" name="nomeDoUsuario" id="nomeDoUsuario" placeholder="Digite seu nome">
                     </div>
                     <div class="input-field">
-                        <label for="">Senha</label>
-                        <input type="password" name="password" id="">
+                        <label for="">Email</label>
+                        <input type="email" name="email" id="email" placeholder="test@test.com">
                     </div>
                     <div class="input-field">
                         <label for="">Confirme seu e-mail</label>
-                        <input type="email" name="emailConfirm" id="emailConfirm">
+                        <input type="email" name="emailConfirm" id="emailConfirm" placeholder="Confirme seu e-mail">
+                    </div>
+
+                    <div class="input-field">
+                        <label for="">Senha</label>
+                        <input type="password" name="password" id="password" placeholder="Digite um senha de no minimo 8 caracteres">
                     </div>
                     <div class="input-field">
                         <label for="">Confirme sua senha</label>
-                        <input type="password" name="passwordConfirm" id="passwordConfirm">
-                    </div>
-                    <div class="inputs-radio">
-                        <div class="">
-                            <input type="radio" name="opcao" id="">
-                            <label for="">Cliente</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="opcao" id="">
-                            <label for="">Veterinário</label>
-                        </div>
+                        <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Confirme sua senha">
                     </div>
                 </div>
-                <button type="submit">CADASTRE-SE</button>
+                <button id="btnCadastro" class="btnCadastro">CADASTRE-SE</button>
                 <div>
-                    <a href="./login.html">Já tem uma conta?</a>
+                    <a href="/login">Já tem uma conta?</a>
                     <span></span>
                 </div>
             </form>
         </section>
+        <div id="errorModal">
+            <div>
+                <p id="errorMsg"></p>
+                <button id="botaoFechar" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
     </main>
 </body>
-
 </html>
