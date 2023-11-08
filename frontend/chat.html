@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="assets/css/chat.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <section class="section_chat">
+   <header class="chat_header">
+    <nav>
+        <div class="info__user">
+          <a href="/"><img src="./assets/img/back-arrow.svg" alt=""></a>
+          <span class="user_foto"></span>
+          <span>Nome</span>
+        </div>
+    </nav>
+   </header>
+    <div class="chat">
+      <div class="box_message"></div>
+      <div class="input_field">
+        <input type="text" name="message" id="inputMessage" placeholder="Mensagem">
+        <button type="submit"><img src="./assets/img/send-arrow.svg" alt=""></button>
+      </div>
+    </div>
+  </section>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io.connect('http://localhost:3000')
+
+    socket.on('messagemDoServidor', (data)=>{
+      console.log(data)
+    })
+  </script>
+</body>
+
+</html>

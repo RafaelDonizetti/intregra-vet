@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/login.css">
     <script src="./assets/js/script.js" defer></script>
+    <script src="assets/js/login.js" defer></script>
     <title>IntegraVet | Login</title>
 </head>
 
@@ -17,25 +18,29 @@
             </picture>
             <ul class="cabecalho_lista">
                 <li class="lista_item">
-                    <a href="./index.html">Início</a>
+                    <a href="/">Início</a>
                 </li>
                 <li class="lista_item">
-                    <a href="./quemsomos.html">Quem somos</a>
+                    <a href="/quemsomos">Quem somos</a>
                 </li>
                 <li class="lista_item">
                     <a href="#rodape">Contato</a>
                 </li>
                 <li class="lista_item">
-                    <a href="./login.html">LOGIN</a>
+                    <a href="#">Projetos</a>
+                </li>
+                <li class="lista_item">
+                    <a href="/login">LOGIN</a>
                 </li>
             </ul>
             <div class="dropdown">
                 <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                 <ul id="myDropdown" class="dropdown-content">
-                    <a href="./index.html" class="item-nav">Ínicio</a>
-                    <a href="./quemsomos.html">Quem somos</a>
+                    <a href="./index" class="item-nav">Ínicio</a>
+                    <a href="./quemsomos">Quem somos</a>
                     <a href="#rodape" class="item-nav">Contato</a>
-                    <a href="./login.html" class="item-nav">Login</a>
+                    <a href="/projetos">Projetos</a>
+                    <a href="./login" class="item-nav">Login</a>
                 </ul>
             </div>
         </nav>
@@ -43,7 +48,7 @@
 
     <main>
         <section>
-            <form action="" method="post">
+            <form action="/login" method="post" name="loginForm">
                 <div class="cabecalho_form">
                     <h1>Login</h1>
                     <span></span>
@@ -51,14 +56,14 @@
                 <div class="inputs">
                     <div class="input-field">
                         <label for="">Email</label>
-                        <input type="email" name="email" id="">
+                        <input type="email" name="email" id="email">
                     </div>
                     <div class="input-field">
                         <label for="">Senha</label>
-                        <input type="password" name="password" id="">
+                        <input type="password" name="password" id="password">
                     </div>
                 </div>
-                <button type="submit">ENTRAR</button>
+                <button id="btnLogin">ENTRAR</button>
                 <div class="form__opcoes">
                     <a href="#">Esqueceu sua senha?</a>
                     <a href="/cadastro">Cadastre-se</a>
@@ -66,6 +71,13 @@
             </form>
         </section>
     </main>
+    <div id="errorModal">
+        <div>
+            <p id="errorMsg"></p>
+            <button id="botaoFechar" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+   
 </body>
 
 </html>
