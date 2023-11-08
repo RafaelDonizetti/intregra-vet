@@ -130,7 +130,7 @@ section {
 .quemsomos-infos1 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    width: 80%;
+    width: 60%;
     justify-items: center;
 }
 
@@ -162,7 +162,7 @@ section {
 }
 
 picture {
-    width: 70%;
+    width: 100%;
 }
 
 picture img {
@@ -170,7 +170,7 @@ picture img {
 }
 
 .rodape {
-    height: 30vh;
+    height: 40vh;
     display: flex;
     width: 100%;
     justify-content: space-around;
