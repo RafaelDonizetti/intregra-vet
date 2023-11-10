@@ -6,6 +6,8 @@ const path = require('path')
 const bcrypt = require('bcryptjs')
 const http = require('http')
 const socketIo = require('socket.io')
+const formatarMensagem = require('../frontend/assets/js/mensagens')
+
 
 const app = express()
 //Criando server HTTP
@@ -56,14 +58,20 @@ app.get('/chat', (req, res) => {
 app.post('/cadastro', (req, res) => {
     const {nomeDoUsuario, email, password, emailConfirm, passwordConfirm} = req.body;
     
-    if (email !== emailConfirm) {
-        return res.send('Os E-mail não estão iguais')
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
 
+    if (!email || !emailConfirm || !email.match(emailRegex)) {
+        return res.send('Preencha ambos os campos de e-mail.');
+    } else if (email !== emailConfirm) {
+        return res.send('Os E-mails não estão iguais.');
     } else {
-        if (password !== passwordConfirm) {
-            return res.send('As senhas não estão iguais')
+        if (!password || !passwordConfirm) {
+            return res.send('Preencha ambos os campos de senha.');
+        } else if (password !== passwordConfirm) {
+            return res.send('As senhas não estão iguais.');
         }
     }
+
     
     //vericando se o emial já existe
     connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async(error, results) => {
@@ -113,18 +121,28 @@ app.post('/login', (req, res) => {
 
 
 //Configuaração de evento de conexão para novos clientes
+
+//Mexi nisso tudo -->
+
+const nomeUsuario = "NomeAleatorio" // <-- Temo que colocar o nome do banco aqui
+
 io.on('connection', (socket) =>{
-    console.log('Um cliente entrou')
-    
+
+    socket.emit('mensagem', formatarMensagem(nomeUsuario, 'Bem-Vindo'));
+    //Diz que alguem entrou, para todos os usuarios
+    socket.broadcast.emit('mensagem', formatarMensagem(nomeUsuario, 'Um Usuario Entrou no chat!'));
+    //Quando alguem sai
     socket.on('disconnect',() =>{
-        console.log('Cliente desconectado');
+        io.emit('mensagem', formatarMensagem(nomeUsuario, ', Saiu do Chat!'));
     });
 
-
-    socket.on('mensagemDoCliente', (data)=>{
-        io.emit('mensagemDoServidor', {data})
+    //
+    socket.on('chatMessage', (msg) => {
+        io.emit('mensagem', formatarMensagem(nomeUsuario, msg))
     })
 });
+
+// <--
 
 server.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
