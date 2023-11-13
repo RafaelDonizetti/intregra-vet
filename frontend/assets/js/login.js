@@ -1,4 +1,4 @@
- function showModal(message) {
+function showModal(message) {
   const modal = document.getElementById('errorModal');
   const errorMsg = document.getElementById('errorMsg');
 
