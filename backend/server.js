@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const http = require('http')
 const socketIo = require('socket.io')
+const formatarMensagem = require('../frontend/assets/js/mensagens')
+
 
 const app = express()
 //Criando server HTTP
@@ -73,7 +75,6 @@ app.post('/cadastro', (req, res) => {
 
     }else if(!email.match(emailRegex)){
         return res.send('Você não digitou um e-mail valido')
-
     } else {
         if (!password || !passwordConfirm) {
             return res.send('Preencha ambos os campos de senha.');
@@ -81,6 +82,8 @@ app.post('/cadastro', (req, res) => {
             return res.send('As senhas não estão iguais.');
         }
     }
+    
+
     
     //vericando se o emial já existe
     connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results) => {
@@ -152,18 +155,28 @@ app.post('/login', (req, res) => {
 
 
 //Configuaração de evento de conexão para novos clientes
+
+//Mexi nisso tudo -->
+
+const nomeUsuario = "NomeAleatorio" // <-- Temo que colocar o nome do banco aqui
+
 io.on('connection', (socket) =>{
-    console.log('Um cliente entrou')
-    
+
+    socket.emit('mensagem', formatarMensagem(nomeUsuario, 'Bem-Vindo'));
+    //Diz que alguem entrou, para todos os usuarios
+    socket.broadcast.emit('mensagem', formatarMensagem(nomeUsuario, 'Um Usuario Entrou no chat!'));
+    //Quando alguem sai
     socket.on('disconnect',() =>{
-        console.log('Cliente desconectado');
+        io.emit('mensagem', formatarMensagem(nomeUsuario, ', Saiu do Chat!'));
     });
 
-
-    socket.on('mensagemDoCliente', (data)=>{
-        io.emit('mensagemDoServidor', {data})
+    //
+    socket.on('chatMessage', (msg) => {
+        io.emit('mensagem', formatarMensagem(nomeUsuario, msg))
     })
 });
+
+// <--
 
 server.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
