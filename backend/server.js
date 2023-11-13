@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 const path = require('path')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const http = require('http')
 const socketIo = require('socket.io')
+const formatarMensagem = require('../frontend/assets/js/mensagens')
+
 
 const app = express()
 //Criando server HTTP
@@ -34,6 +38,11 @@ connection.connect(err => {
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'sua-chave-secreta-aqui',
+    resave: false,
+    saveUninitialized: true
+}))
 
 // Rota para exibir o formulário
 app.get('/', (req, res) => {
@@ -56,54 +65,88 @@ app.get('/chat', (req, res) => {
 app.post('/cadastro', (req, res) => {
     const {nomeDoUsuario, email, password, emailConfirm, passwordConfirm} = req.body;
     
-    if (email !== emailConfirm) {
-        return res.send('Os E-mail não estão iguais')
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!email || !emailConfirm) {
+        return res.send('Preencha ambos os campos de e-mail.');
 
+    } else if (email !== emailConfirm) {
+        return res.send('Os E-mails não estão iguais.');
+
+    }else if(!email.match(emailRegex)){
+        return res.send('Você não digitou um e-mail valido')
     } else {
-        if (password !== passwordConfirm) {
-            return res.send('As senhas não estão iguais')
+        if (!password || !passwordConfirm) {
+            return res.send('Preencha ambos os campos de senha.');
+        } else if (password !== passwordConfirm) {
+            return res.send('As senhas não estão iguais.');
         }
     }
     
+
+    
     //vericando se o emial já existe
-    connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async(error, results) => {
-        if (error) throw error
+    connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results) => {
+        if (error) throw error;
 
         if (results.length > 0) {
-            return res.send('E-mail já existente')
+            return res.send('E-mail já existente');
         } else {
-            const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password, salt)
-            
-            
-            // criação de usiário
-            connection.query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', [nomeDoUsuario, email, hashedPassword], (error, results) => {
-                if (error) {
-                    console.log(error.message);
-                    res.send('Erro ao adicionar usuário.');
-                } else {
-                    res.send('Usuário adicionado com sucesso!');
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            // Criação de usuário
+            connection.query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', [nomeDoUsuario, email, hashedPassword], async (insertError, insertResults) => {
+                if (insertError) {
+                    console.log(insertError.message);
+                    return res.send('Erro ao adicionar usuário.');
                 }
 
+                const userId = insertResults.insertId;
+                const token = jwt.sign({ userId, userName: nomeDoUsuario }, 'seu-segredo-secreto', { expiresIn: '7d' });
+
+                // Atualização do token no banco de dados
+                connection.query('UPDATE usuarios SET token = ? WHERE id = ?', [token, userId], (updateError) => {
+                    if (updateError) {
+                        console.log('Erro ao atualizar o token no banco de dados: ', updateError);
+                        res.send('Erro ao fazer login');
+                    } else {
+                        res.send('Usuário adicionado com sucesso!');
+                    }
+                });
             });
         }
-    })
-})
+    });
+});
+
 
 // login
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async(error, results) => {
+    
+    connection.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results) => {
         if (error) throw error;
 
         if (results.length === 0) {
-             res.send('Email não encontrado!');
+            res.send('Email não encontrado!');
         } else {
-            // Compare a senha fornecida com a senha armazenada no banco de dados
             const isMatch = await bcrypt.compare(password, results[0].senha);
 
             if (isMatch) {
-                 res.send('Login bem-sucedido!');
+                const userId = results[0].id;
+                const userName = results[0].nome;
+                const token = jwt.sign({ userId, userName }, 'seu-segredo-secreto', { expiresIn: '7d' });
+
+                // Atualização do token no banco de dados
+                connection.query('UPDATE usuarios SET token = ? WHERE id = ?', [token, userId], (updateError) => {
+                    if (updateError) {
+                        console.error('Erro ao atualizar o token no banco de dados:', updateError);
+                        res.send('Erro ao fazer login.');
+                    } else {
+                        // Retorne o token ao cliente para armazenar localmente
+                        res.json({ token, userId, userName });
+                    }
+                });
             } else {
                 res.send('Senha incorreta!');
             }
@@ -113,18 +156,28 @@ app.post('/login', (req, res) => {
 
 
 //Configuaração de evento de conexão para novos clientes
+
+//Mexi nisso tudo -->
+
+const nomeUsuario = "NomeAleatorio" // <-- Temo que colocar o nome do banco aqui
+
 io.on('connection', (socket) =>{
-    console.log('Um cliente entrou')
-    
+
+    socket.emit('mensagem', formatarMensagem(nomeUsuario, 'Bem-Vindo'));
+    //Diz que alguem entrou, para todos os usuarios
+    socket.broadcast.emit('mensagem', formatarMensagem(nomeUsuario, 'Um Usuario Entrou no chat!'));
+    //Quando alguem sai
     socket.on('disconnect',() =>{
-        console.log('Cliente desconectado');
+        io.emit('mensagem', formatarMensagem(nomeUsuario, ', Saiu do Chat!'));
     });
 
-
-    socket.on('mensagemDoCliente', (data)=>{
-        io.emit('mensagemDoServidor', {data})
+    //
+    socket.on('chatMessage', (msg) => {
+        io.emit('mensagem', formatarMensagem(nomeUsuario, msg))
     })
 });
+
+// <--
 
 server.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
