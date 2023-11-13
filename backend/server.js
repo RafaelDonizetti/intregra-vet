@@ -143,8 +143,7 @@ app.post('/login', (req, res) => {
                         console.error('Erro ao atualizar o token no banco de dados:', updateError);
                         res.send('Erro ao fazer login.');
                     } else {
-                        // Retorne o token ao cliente para armazenar localmente
-                        res.json({ token, userId, userName });
+                        res.send('Login bem-sucedido!')
                     }
                 });
             } else {
