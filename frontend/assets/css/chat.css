@@ -30,8 +30,9 @@ body {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 5vh;
+    height: 6vh;
     background-color: #F5BB00;
+    position: fixed;
 }
 .chat_header nav{
     display: flex;
@@ -56,17 +57,13 @@ body {
 
 .chat{
     width: 100%;
-    height: 95vh;
+    height: 100vh;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
     flex-direction: column;
 }
 
-.box_message{
-    width: 80%;
-    height: 100vh;
-}
 
 .input_field{
     width: 100%;
@@ -76,6 +73,8 @@ body {
     justify-content: space-around;
     background: #F5BB00;
     height: 10vh;
+    position: fixed;
+    bottom: 0;
 }
 
 .input_field input{
@@ -98,24 +97,40 @@ button{
     background: #574A1E;
 }
 
+/* Chat */
+.mensagem{
+    margin-top: 85px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;    
+}
+
 .messages{
-    min-width: 100%;
-    margin-top: 25px;
-    border: 2px solid;
-    border-color: #F5BB00;
+    width: 50%;
+    height: 100px;
     display: flex;
     flex-direction: row-reverse;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffe281;
+    border-radius: 8px;
 }
+
 .messagesDiv{
+    width: 100%;
+}
+
+.seguraMensagens{
     width: 80%;
 }
+
 .infoMessages{
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 70%;
 }
 .boxMesseges{
-    width: 350px;
+    width: 70%;
     word-break: break-all;
 }
