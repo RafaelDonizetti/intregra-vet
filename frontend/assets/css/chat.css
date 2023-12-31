@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Ruda&display=swap');
+
 * {
-    margin: 0px;
-    padding: 0px;
-    border: none;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    text-decoration: none;
-    scroll-behavior: smooth;
 }
 
 body {
@@ -15,10 +13,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: 'Roboto', Arial, Helvetica, sans-serif ;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    background-color: #f0f0f0; /* Cor de fundo */
 }
 
-.section_chat{
+.section_chat {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -26,7 +25,7 @@ body {
     align-items: center;
 }
 
-.chat_header{
+.chat_header {
     display: flex;
     align-items: center;
     width: 100%;
@@ -34,20 +33,21 @@ body {
     background-color: #F5BB00;
     position: fixed;
 }
-.chat_header nav{
+
+.chat_header nav {
     display: flex;
     gap: 10px;
     position: relative;
     left: 10px;
 }
 
-.infos,.info__user{
+.info__user {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.user_foto{
+.user_foto {
     display: block;
     width: 30px;
     height: 30px;
@@ -55,29 +55,35 @@ body {
     border-radius: 50%;
 }
 
-.chat{
+.chat_area {
     width: 100%;
-    height: 100vh;
-    align-items: center;
-    justify-content: space-between;
+    height: calc(100vh - 6vh); /* Ajusta a altura da área do chat */
     display: flex;
     flex-direction: column;
+    justify-content: flex-start; /* Faz as mensagens começarem na parte inferior */
+    align-items: center;
+    margin-top: 5vh; /* Para deixar espaço para o cabeçalho */
 }
 
-
-.input_field{
+.messagesDiv {
     width: 100%;
-    margin-top: 10px;
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 80px; /* Adicione uma margem inferior suficientemente grande para acomodar várias mensagens */
+}
+
+.input_field {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
     background: #F5BB00;
-    height: 10vh;
+    height: 8vh;
     position: fixed;
     bottom: 0;
 }
 
-.input_field input{
+.input_field input {
     background-color: #574A1E;
     outline: none;
     padding-left: 10px;
@@ -87,50 +93,69 @@ body {
     width: 80%;
 }
 
-.input_field input::placeholder{
+.input_field input::placeholder {
     color: #D8D8D8;
 }
 
-button{
+button {
     padding: 14px 14px;
     border-radius: 4px;
     background: #574A1E;
+    cursor: pointer;
 }
 
 /* Chat */
-.mensagem{
-    margin-top: 85px;
+.mensagem {
     display: flex;
     justify-content: center;
-    flex-direction: row;    
+    flex-direction: row;
+    margin-top: 10px; /* Espaçamento entre as mensagens */
 }
 
-.messages{
+.messages {
     width: 50%;
-    height: 100px;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
     justify-content: center;
     background-color: #ffe281;
     border-radius: 8px;
+    padding: 20px;
 }
 
-.messagesDiv{
-    width: 100%;
-}
-
-.seguraMensagens{
-    width: 80%;
-}
-
-.infoMessages{
+.infoMessages {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 70%;
 }
-.boxMesseges{
+
+.boxMesseges {
     width: 70%;
     word-break: break-all;
+}
+
+@media screen and (max-width: 320px) {
+    .messagesDiv{
+        padding: 10px;
+    }
+    .messages{
+        width: 100%;
+    }   
+}
+
+@media screen and (max-width: 768px) {
+    .messages{
+        width: 70%;
+    }   
+}
+
+@media screen and (min-width:1024px) {
+    .user_message{
+        font-size: 20px;
+    }
+
+    .messages_time{
+        font-size: 16px;
+    }
 }
