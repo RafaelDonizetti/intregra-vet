@@ -69,6 +69,22 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+
+const verifyAdmin = (req, res, next) =>{
+    const userId = req.userId
+    connection.query("SELECT roles FROM usuarios WHERE id = ?",
+    [userId],
+    (error, results) => {
+        if (error) {
+          console.error("Erro ao verificar a role do usuário:", error);
+          return res.status(500).send("Erro interno do servidor");
+        }
+        const userRole = results[0].roles;
+        next();
+    }
+    );
+};
+
 // Rota para exibir o formulário e tambem verificar os tokens
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
@@ -82,9 +98,15 @@ app.get("/login", (req, res) => {
 app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "cadastro.html"));
 });
-app.get("/chat", verifyToken, (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
+app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
+  if (req.userName && req.userName === 'admin'){
+    res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"))
+  } else {
+    res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
+  }
 });
+
+
 
 // Rota para inserir usuário
 app.post("/cadastro", (req, res) => {
@@ -137,8 +159,8 @@ app.post("/login", (req, res) => {
         return res.send("Email não encontrado!");
       }
       const isMatch = await bcrypt.compare(password, results[0].senha);
-
-      if (isMatch) {
+      //TIRAR O TRUE
+      if (true) {
         const userId = results[0].id;
         const userName = results[0].nome;
         const token = jwt.sign({ userId, userName }, "seu-segredo-secreto", {
@@ -243,6 +265,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
+server.listen(3000, (req) => {
   console.log("Servidor rodando na porta 3000");
 });
