@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="assets/css/chat.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat | IntegraVet</title>
+  <script src="./assets/js/cliente.js"></script>
+</head>
+<body>
+  <section class="section_chat">
+   <header class="chat_header">
+    <nav>
+        <div class="info__user">
+          <a href="/"><img src="./assets/img/back-arrow.svg" alt=""></a>
+          <span class="user_foto"></span>
+          <span id="nome"></span>
+        </div>
+    </nav>
+   </header>
+   <!-- Área do chat -->
+   <div class="chat_area">
+      <!-- Div para as mensagens -->
+      <div class="messagesDiv" id="seguraMensagens"></div>
+      <!-- Formulário de entrada de mensagem -->
+      <form class="input_field" id="chat-form">
+        <input type="text" name="message" id="msg" placeholder="Mensagem">
+        <button type="submit"><img src="./assets/img/send-arrow.svg" alt=""></button>
+      </form>
+   </div>
+  </section>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+      function scrollParaBaixo() {
+      const messagesDiv = document.getElementById('seguraMensagens');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    const textMessage = document.getElementById('chat-form')
+    const socket = io.connect('http://localhost:3000')
+    // Pega a mensagem do servidor
+    socket.on('mensagem', mensagem=>{
+      console.log(mensagem);
+      mensagemFrontEnd(mensagem);
+    });
+
+      // Envia a mensagem
+      textMessage.addEventListener('submit', (e) =>{
+        e.preventDefault();
+
+        //Pega o Texto Escrito pelo Usuario
+        const msg = e.target.elements.msg.value.trim();
+        
+        if (msg !== ''){
+
+        //Envia uma mensagem pro servidor
+        socket.emit('chatMessage', msg);
+        
+        //Limpa a barra de escrever mensagem dps de enviar
+        e.target.elements.msg.value = '';
+        e.target.elements.msg.focus();
+        }
+
+      });
+
+      //Da output da mensagem para o frontend
+      function mensagemFrontEnd(mensagem) {
+      const div = document.createElement('div');
+      div.classList.add('mensagem');
+      div.innerHTML = `
+        <div class="messages">
+            <p class = "messages_time">${mensagem.time}</p>
+            <div class="infoMessages">
+                <p class = "user_message">${mensagem.nome}</p>
+                <p class="boxMesseges">${mensagem.text}</p>
+            </div>
+        </div>`;
+    document.getElementById('seguraMensagens').appendChild(div);
+
+    // Chame a função para rolar automaticamente para baixo
+    scrollParaBaixo();
+}
+
+  </script>
+</body>
+</html>
