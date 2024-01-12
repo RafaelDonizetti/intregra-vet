@@ -54,15 +54,16 @@
         <section class="apresentacao">
             <div class="apresentacao_infos">
                 <div class="apresentacao_texto">
-                    <h1 class="titulo_infos">
+                    <h1 class="titulo_infos" id="titulo_infos">
                         Fale com um Vet por chat para te ajudar!
-                        <!--
-                            Div que fala o nome da pessoa
-                        -->
-                        <div id="saudacao"></div>
                     </h1>
-                    <p>Receba orientação veterinária especializada, sem sair de casa e na palma da sua mão.</p>
-                    <a href="./chat">CHAT</a>
+                    
+                    <!--Div que fala o nome da pessoa-->
+                    <div id="saudacao"></div>
+                    <div class="subinfos_btn">
+                        <p>Receba orientação veterinária especializada, sem sair de casa e na palma da sua mão.</p>
+                        <a href="./chat" id="chat_btn">CHAT</a>
+                    </div>
                 </div>
             </div>
 
@@ -154,6 +155,13 @@
             </div>
         </article>
     </footer>
+    
+    <div id="errorModal">
+        <div>
+            <p id="errorMsg"></p>
+            <button id="botaoFechar" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
 
     <script>
         ScrollReveal().reveal('.apresentacao', {

@@ -125,7 +125,7 @@ main {
 }
 
 section {
-    width: 80%;
+    width: 85%;
     min-height: 100vh;
 }
 
@@ -153,8 +153,21 @@ section {
     gap: 25px;
 }
 
-.apresentacao_texto .titulo_infos {
+.apresentacao_texto .titulo_infos{
     font-size: 36px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+}
+
+.subinfos_btn{
+    height: 200px;
+    width: 17rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#saudacao{
+    font-size: 42px;
     text-align: left;
     font-family: 'Roboto', sans-serif;
 }
@@ -410,6 +423,40 @@ picture {
 .rodape__info_atendimento ul a,
 .rodape__info_Institucional ul a {
     color: #797979;
+}
+
+/* Modal */
+#errorModal{
+    display: none;
+    position: fixed; 
+    top: 0; 
+    right: 0; 
+    bottom: 0; 
+    left: 0; 
+    background: rgba(0,0,0,0.5); 
+    z-index: 1000;
+}
+#errorModal div{
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    max-width: 300px;
+    margin: 100px auto; 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#errorModal button{
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #574A1E;
+    background:#F5BB00;
+    padding: 10px 10px;
+    border-radius: 0.1565rem;
+
 }
 
 @media screen and (max-width:1440px) {
