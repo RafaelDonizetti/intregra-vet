@@ -1,6 +1,6 @@
 # IntegraVet - Plataforma de Assistência Veterinária Online
 
-Bem-vindo ao repositório oficial do IntegraVet, um projeto desenvolvido em parceria por [Rafael Donizetti] e [Márcio Gabriel]! O IntegraVet é uma plataforma online que visa facilitar a comunicação entre veterinários e seus clientes por meio de um chat de texto, proporcionando uma experiência de assistência veterinária eficaz e conveniente.
+Bem-vindo ao repositório oficial do IntegraVet, um projeto desenvolvido em parceria por Rafael Donizetti e Márcio Gabriel! O IntegraVet é uma plataforma online que visa facilitar a comunicação entre veterinários e seus clientes por meio de um chat de texto, proporcionando uma experiência de assistência veterinária eficaz e conveniente.
 
 ## Tecnologias Utilizadas
 
@@ -16,10 +16,4 @@ Bem-vindo ao repositório oficial do IntegraVet, um projeto desenvolvido em parc
 
 2. **Perfil do Veterinário**: Cada veterinário possui um perfil personalizado que inclui informações relevantes, como especializações, horário de atendimento e avaliações de clientes anteriores.
 
-## Configuração do Ambiente de Desenvolvimento
-
-Certifique-se de ter o Node.js e o MySQL instalados em seu ambiente. Clone o repositório e execute os seguintes comandos:
-
-```bash
-npm install       # Instala as dependências do Node.js
-npm start         # Inicia o servidor local
+3. **Chat próprio para o administrador, com lista de contato a esquerda podem ver as mensagem enviadas e recebidas dos clientes.
