@@ -69,20 +69,20 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-
-const verifyAdmin = (req, res, next) =>{
-    const userId = req.userId
-    connection.query("SELECT roles FROM usuarios WHERE id = ?",
+const verifyAdmin = (req, res, next) => {
+  const userId = req.userId;
+  connection.query(
+    "SELECT roles FROM usuarios WHERE id = ?",
     [userId],
     (error, results) => {
-        if (error) {
-          console.error("Erro ao verificar a role do usuário:", error);
-          return res.status(500).send("Erro interno do servidor");
-        }
-        const userRole = results[0].roles;
-        next();
+      if (error) {
+        console.error("Erro ao verificar a role do usuário:", error);
+        return res.status(500).send("Erro interno do servidor");
+      }
+      const userRole = results[0].roles;
+      next();
     }
-    );
+  );
 };
 
 // Rota para exibir o formulário e tambem verificar os tokens
@@ -99,14 +99,12 @@ app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "cadastro.html"));
 });
 app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
-  if (req.userName && req.userName === 'admin'){
-    res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"))
+  if (req.userName && req.userName === "admin") {
+    res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"));
   } else {
     res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
   }
 });
-
-
 
 // Rota para inserir usuário
 app.post("/cadastro", (req, res) => {
@@ -219,20 +217,19 @@ io.on("connection", (socket) => {
         formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
       );
     });
-    return;
+  } else {
+    // Se não houver token, defina um nome de usuário padrão ou trate conforme necessário
+    const nomeUsuarioPadrao = "Usuário Desconhecido";
+
+    // Associe o nome de usuário ao socket.id
+    usuariosConectados.set(socket.id, nomeUsuarioPadrao);
+
+    // Envie uma mensagem de entrada para todos os usuários
+    io.emit(
+      "mensagem",
+      formatarMensagem("SISTEMA", `${nomeUsuarioPadrao} entrou no chat!`)
+    );
   }
-  // Se não houver token, defina um nome de usuário padrão ou trate conforme necessário
-  const nomeUsuarioPadrao = "Usuário Desconhecido";
-
-  // Associe o nome de usuário ao socket.id
-  usuariosConectados.set(socket.id, nomeUsuarioPadrao);
-
-  // Envie uma mensagem de entrada para todos os usuários
-  io.emit(
-    "mensagem",
-    formatarMensagem("SISTEMA", `${nomeUsuarioPadrao} entrou no chat!`)
-  );
-
   // Lida com mensagens do chat
   socket.on("chatMessage", (msg) => {
     // data com ISO8601
