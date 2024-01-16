@@ -40,6 +40,12 @@
 
       const textMessage = document.getElementById("chat-form");
       const socket = io.connect("http://localhost:3000");
+      
+      socket.emit("joinRoom");
+
+      socket.on("usuariosDoBanco", (dadosDoBanco) => {
+        console.log(dadosDoBanco)
+      })
       // Pega a mensagem do servidor
       socket.on("mensagem", (mensagem) => {
         console.log(mensagem);

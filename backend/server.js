@@ -11,6 +11,7 @@ const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
+const {userJoin, getCurrentUser } = require("../backend/utils")
 
 const app = express();
 //Criando server HTTP
@@ -197,6 +198,8 @@ io.on("connection", (socket) => {
     .find((row) => row.startsWith("authToken="))
     .split("=")[1];
 
+
+socket.on("joinRoom", async() => {
   // Verifica se há um token
   if (token) {
     jwt.verify(token, "seu-segredo-secreto", (err, decoded) => {
@@ -205,18 +208,24 @@ io.on("connection", (socket) => {
         console.error("Erro ao verificar o token:", err);
         return;
       }
-
+      const idDecoded = jwt.decode(token)
       const nomeUsuario = decoded.userName || "Usuário Desconhecido";
 
       // Associe o nome de usuário ao socket.id
+      console.log(idDecoded.userId)
       usuariosConectados.set(socket.id, nomeUsuario);
 
+
+      const user = userJoin(socket.id, nomeUsuario, idDecoded);
+      socket.join(user.room);
+      console.log(user.room)
       // Envie uma mensagem de entrada para todos os usuários
-      io.emit(
+      socket.broadcast.to(user.room).emit(
         "mensagem",
         formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
       );
     });
+
   } else {
     // Se não houver token, defina um nome de usuário padrão ou trate conforme necessário
     const nomeUsuarioPadrao = "Usuário Desconhecido";
@@ -230,6 +239,25 @@ io.on("connection", (socket) => {
       formatarMensagem("SISTEMA", `${nomeUsuarioPadrao} entrou no chat!`)
     );
   }
+  
+})
+
+const obterUsuariosDoBanco = () => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT sender.nome, sender.id FROM historico his JOIN usuarios sender ON his.autor_id = sender.id WHERE sender.roles != 'admin' GROUP BY sender.id",
+      (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+
   // Lida com mensagens do chat
   socket.on("chatMessage", (msg) => {
     // data com ISO8601
