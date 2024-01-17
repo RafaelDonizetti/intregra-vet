@@ -200,6 +200,14 @@ io.on("connection", (socket) => {
 
 
 socket.on("joinRoom", async() => {
+  obterUsuariosDoBanco((error, dadosBanco) => {
+    if (error) {
+      console.error("Erro ao obter usuários do banco de dados:", error);
+      return;
+    }
+    const usuarios = dadosBanco.map(usuario => usuario.id);
+    
+  
   // Verifica se há um token
   if (token) {
     jwt.verify(token, "seu-segredo-secreto", (err, decoded) => {
@@ -212,18 +220,30 @@ socket.on("joinRoom", async() => {
       const nomeUsuario = decoded.userName || "Usuário Desconhecido";
 
       // Associe o nome de usuário ao socket.id
-      console.log(idDecoded.userId)
+
       usuariosConectados.set(socket.id, nomeUsuario);
 
+      const user = userJoin(socket.id, nomeUsuario, idDecoded.userId);
 
-      const user = userJoin(socket.id, nomeUsuario, idDecoded);
-      socket.join(user.room);
-      console.log(user.room)
+
+      if (user.room === 1){
+        socket.join(usuarios);
+        socket.broadcast.to(usuarios).emit(
+          "mensagem",
+          formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
+        );
+      } else {
+      socket.join(user.room); 
       // Envie uma mensagem de entrada para todos os usuários
       socket.broadcast.to(user.room).emit(
         "mensagem",
         formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
       );
+      }
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        user: user.userName
+      })
     });
 
   } else {
@@ -234,44 +254,57 @@ socket.on("joinRoom", async() => {
     usuariosConectados.set(socket.id, nomeUsuarioPadrao);
 
     // Envie uma mensagem de entrada para todos os usuários
-    io.emit(
-      "mensagem",
+    io.emit("mensagem",
       formatarMensagem("SISTEMA", `${nomeUsuarioPadrao} entrou no chat!`)
     );
   }
-  
+})
 })
 
-const obterUsuariosDoBanco = () => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT sender.nome, sender.id FROM historico his JOIN usuarios sender ON his.autor_id = sender.id WHERE sender.roles != 'admin' GROUP BY sender.id",
-      (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
+const obterUsuariosDoBanco = (callback) => {
+  connection.query(
+    "SELECT nome, id FROM usuarios WHERE roles != 'admin'",
+    (error, results) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        // Mapeie os resultados para o formato desejado
+        const usuarios = results.map(result => ({ nome: result.nome, id: result.id }));
+        callback(null, usuarios);
       }
-    );
-  });
-}
+    }
+  );
+};
+
 
 
   // Lida com mensagens do chat
   socket.on("chatMessage", (msg) => {
+    obterUsuariosDoBanco((error, dadosBanco) => {
+      if (error) {
+        console.error("Erro ao obter usuários do banco de dados:", error);
+        return;
+      }
+      const usuarios = dadosBanco.map(usuario => usuario.id);
     // data com ISO8601
     const nowDate = Date.now();
     const date = moment().utc(nowDate);
-    console.log(date);
+    
+    
 
     // Obtém o nome de usuário associado ao socket.id
     const nomeUsuario =
       usuariosConectados.get(socket.id) || "Usuário Desconhecido";
 
-    // Emite a mensagem para todos os usuários
-    io.emit("mensagem", formatarMensagem(nomeUsuario, msg));
-  });
+    const user = getCurrentUser(socket.id);
+    if (user.room === 1){
+      io.to(usuarios).emit("mensagem", formatarMensagem(nomeUsuario, msg));
+
+    } else {
+      io.to(user.room).emit("mensagem", formatarMensagem(nomeUsuario, msg));
+    }
+    });
+  })
 
   // Lida com desconexões
   socket.on("disconnect", () => {

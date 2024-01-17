@@ -8,27 +8,8 @@
     <script src="./assets/js/cliente.js"></script>
   </head>
   <body>
-    <aside class="contatos" id="contados">
-      <div class="contato1">
-        <h1>Rafael Donizetti</h1>
-        <span></span>
-      </div>
-      <div class="contato1">
-        <h1>Rafael Donizetti</h1>
-        <span></span>
-      </div>
-      <div class="contato1">
-        <h1>Marcio</h1>
-        <span></span>
-      </div>
-      <div class="contato1">
-        <h1>Gabriel</h1>
-        <span></span>
-      </div>
-      <div class="contato1">
-        <h1>Thales</h1>
-        <span></span>
-      </div>
+    <aside class="contatos" id="users">
+
     </aside>
 
     <section class="section_chat">
@@ -56,17 +37,21 @@
     </section>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
       function scrollParaBaixo() {
         const messagesDiv = document.getElementById("seguraMensagens");
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }
-
+      const userList = document.getElementById('users')
       const textMessage = document.getElementById("chat-form");
       const socket = io.connect("http://localhost:3000");
 
 
       socket.emit("joinRoom");
-
+      
+      socket.on("roomUsers", (room, user) => {
+        contatosFrontEnd(room.user)
+      })
 
       // Pega a mensagem do servidor
       socket.on("mensagem", (mensagem) => {
@@ -92,6 +77,24 @@
       });
 
       //Da output da mensagem para o frontend
+      function contatosFrontEnd(room) {
+      userList.innerHTML = `
+        ${users.map(room => `<li>${room.user}</li>`).join('')}
+      `
+      }
+
+      function contsatosFrontEnd(room) {
+        const div = document.createElement("div");
+        div.classList.add("room");
+        div.innerHTML = `
+        <div class="contato1">
+          <h1>${room}</h1>
+          <span></span>
+        </div>`;
+        document.getElementById("contados").appendChild(div);
+
+      }
+
       function mensagemFrontEnd(mensagem) {
         const div = document.createElement("div");
         div.classList.add("mensagem");
@@ -105,9 +108,9 @@
         </div>`;
         document.getElementById("seguraMensagens").appendChild(div);
 
-        // Chame a função para rolar automaticamente para baixo
         scrollParaBaixo();
       }
+
     </script>
   </body>
 </html>
