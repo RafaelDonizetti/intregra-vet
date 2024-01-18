@@ -11,7 +11,7 @@ const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
-const {userJoin, getCurrentUser } = require("../backend/utils")
+const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils")
 
 const app = express();
 //Criando server HTTP
@@ -206,6 +206,7 @@ socket.on("joinRoom", async() => {
       return;
     }
     const usuarios = dadosBanco.map(usuario => usuario.id);
+    const usuariosBanco = dadosBanco.map(usuario => usuario.nome)
     
   
   // Verifica se há um token
@@ -225,13 +226,18 @@ socket.on("joinRoom", async() => {
 
       const user = userJoin(socket.id, nomeUsuario, idDecoded.userId);
 
-
+      
       if (user.room === 1){
         socket.join(usuarios);
         socket.broadcast.to(usuarios).emit(
           "mensagem",
           formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
-        );
+          );
+        io.emit("roomUsers", {
+          users: usuariosBanco
+        })
+        console.log(usuariosBanco)
+        console.log(usuarios)
       } else {
       socket.join(user.room); 
       // Envie uma mensagem de entrada para todos os usuários
@@ -240,10 +246,6 @@ socket.on("joinRoom", async() => {
         formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
       );
       }
-      io.to(user.room).emit("roomUsers", {
-        room: user.room,
-        user: user.userName
-      })
     });
 
   } else {
@@ -308,6 +310,7 @@ const obterUsuariosDoBanco = (callback) => {
 
   // Lida com desconexões
   socket.on("disconnect", () => {
+    const user = userLeave(socket.id)
     // Obtém o nome de usuário associado ao socket.id
     const nomeUsuario =
       usuariosConectados.get(socket.id) || "Usuário Desconhecido";
@@ -316,10 +319,11 @@ const obterUsuariosDoBanco = (callback) => {
     usuariosConectados.delete(socket.id);
 
     // Emite uma mensagem de saída para todos os usuários
-    io.emit(
+    if(user) {
+    io.to(user.room).emit(
       "mensagem",
       formatarMensagem("Servidor", `${nomeUsuario} saiu do chat.`)
-    );
+    )};
   });
 });
 

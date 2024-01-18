@@ -43,8 +43,7 @@
       
       socket.emit("joinRoom");
 
-      socket.on("usuariosDoBanco", (dadosDoBanco) => {
-        console.log(dadosDoBanco)
+      socket.on("roomUsers", (room, users) => {       
       })
       // Pega a mensagem do servidor
       socket.on("mensagem", (mensagem) => {
