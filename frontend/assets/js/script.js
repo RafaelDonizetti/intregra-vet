@@ -1,8 +1,7 @@
-function toggleDropdown() {
-    var dropdown = document.getElementById("myDropdown");
-    if (dropdown.style.display === "none") {
-        dropdown.style.display = "block";
-    } else {
-        dropdown.style.display = "none";
-    }
+function openNav() {
+  document.getElementById("mySidebar").style.width = "100%";
+}
+
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
 }

@@ -1,0 +1,189 @@
+.cabecalho {
+  z-index: 999;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 8.125rem;
+  background: #fff;
+}
+
+.cabecalho_logo {
+  width: 200px;
+  height: 200px;
+}
+
+.cabecalho_logo img {
+  max-width: 100%;
+}
+
+.cabecalho_nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 79%;
+}
+
+.cabecalho_lista {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.cabecalho_lista > a {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  color: #000;
+  background: linear-gradient(#f5bb00, #f5bb00) no-repeat left 1.4rem;
+  background-size: 0 4px;
+  transition: background 0.3s ease;
+}
+
+.cabecalho_lista a:hover {
+  background-size: 100% 4px;
+}
+
+#loginBtn,
+#userBtn {
+  padding: 10px 16px;
+  background-color: #f5bb00;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#userBtn {
+  font-size: 20px;
+}
+
+#mySidebar {
+  height: 100vh;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #eac756;
+  overflow-x: hidden;
+  transition: 0.2s;
+  padding-top: 60px;
+}
+#loginBtn-dropdown {
+  display: block;
+}
+
+#logoutBtn-dropDown {
+  display: none;
+}
+
+.logged-in #loginBtn-dropdown {
+  display: none;
+}
+
+.logged-in #logoutBtn-dropdown {
+  display: none;
+}
+
+#mySidebar a {
+  font-family: "Roboto", sans-serif;
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 32px;
+  color: #000000;
+  display: block;
+  transition: 0.3s;
+}
+.openbtn {
+  padding: 14px 20px;
+  background-color: #f5bb00;
+  border-radius: 4px;
+}
+
+#mySidebar a:hover {
+  color: #f1f1f1;
+}
+
+#main {
+  padding: 16px;
+}
+
+.dropdown-arrow {
+  color: #6e6e6e96;
+}
+
+/* Estilo básico para o dropdown */
+#profileDropdown {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  color: #000;
+  position: absolute;
+  display: none;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+#profileDropdown a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+#profileDropdown a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Adicione mais estilos conforme necessário */
+
+/* telas menores e mobile */
+
+@media screen and (max-width: 425px) {
+  .cabecalho_logo {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .cabecalho_nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #main {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cabecalho_lista {
+    display: none;
+  }
+  #mySidebar {
+    width: 0;
+  }
+
+  #main {
+    margin-left: 0;
+  }
+  .apresentacao {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .apresentacao_texto {
+    width: 100%;
+  }
+  .apresentacao_texto p {
+    width: inherit;
+    font-size: 24px;
+  }
+  .apresentacao picture,
+  .oquefazemos__foto {
+    display: none;
+  }
+  .oquefazemos_section {
+    flex-direction: column;
+  }
+}
