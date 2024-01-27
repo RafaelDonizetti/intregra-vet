@@ -41,6 +41,43 @@ connection.connect((err) => {
   console.log("Conectado ao banco de dados com o ID", connection.threadId);
 });
 
+function historyMsg(mensagem, destiny_id, autor_id){
+  const query =`
+  INSERT INTO historico (mensagem, destiny_id, autor_id)
+  VALUES (?, ?, ?)
+`;
+
+const values = [mensagem, destiny_id, autor_id];
+
+connection.query(query, values, (err, results) => {
+  if (err) {
+    console.error('Erro ao inserir mensagem no banco de dados:', err);
+  } else {
+    console.log('Mensagem inserida com sucesso no banco de dados');
+  }
+})
+};
+
+function historyChat(destiny_id, autor_id, callback){
+  const query = `SELECT sender.nome AS sender_name, 
+  sender.id AS sender_id, his.mensagem, 
+  his.send_date FROM historico his JOIN 
+  usuarios sender ON his.autor_id = sender.id 
+  WHERE (his.autor_id = 1 AND his.destiny_id = ?) 
+  OR (his.autor_id = ? AND his.destiny_id = 1) 
+  ORDER BY his.send_date asc;`;
+
+  const values = [destiny_id, autor_id];
+  connection.query(query, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao obter histórico do chat do banco de dados:', err);
+      callback(err, null);
+    } else {
+      callback(null, results);
+    }
+  })
+}
+
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
@@ -100,7 +137,7 @@ app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "cadastro.html"));
 });
 app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
-  if (req.userName && req.userName === "admin") {
+  if (req.userId === 1) {
     res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"));
   } else {
     res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
@@ -159,7 +196,7 @@ app.post("/login", (req, res) => {
       }
       const isMatch = await bcrypt.compare(password, results[0].senha);
       //TIRAR O TRUE
-      if (true) {
+      if (isMatch) {
         const userId = results[0].id;
         const userName = results[0].nome;
         const token = jwt.sign({ userId, userName }, "seu-segredo-secreto", {
@@ -228,16 +265,11 @@ socket.on("joinRoom", async() => {
 
       
       if (user.room === 1){
-        socket.join(usuarios);
-        socket.broadcast.to(usuarios).emit(
-          "mensagem",
-          formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
-          );
+        socket.join(user.room)
         io.emit("roomUsers", {
-          users: usuariosBanco
+          users: usuariosBanco,
+          room: usuarios
         })
-        console.log(usuariosBanco)
-        console.log(usuarios)
       } else {
       socket.join(user.room); 
       // Envie uma mensagem de entrada para todos os usuários
@@ -245,6 +277,16 @@ socket.on("joinRoom", async() => {
         "mensagem",
         formatarMensagem("SISTEMA", `${nomeUsuario} entrou no chat!`)
       );
+
+      historyChat(user.room, user.room, (error, historico) => {
+        if (error) {
+          console.error('Erro ao recuperar histórico do chat:', error);
+        } else {
+          // Enviar histórico para o cliente que está entrando no chat
+          socket.emit("chatHistoryClient", historico)
+        }
+      });
+
       }
     });
 
@@ -279,6 +321,29 @@ const obterUsuariosDoBanco = (callback) => {
 };
 
 
+let globalRoomValue;
+// Lida com os clicks nos contatos
+socket.on("roomClick", (userName, roomValue) => {
+  socket.leave(globalRoomValue)
+  globalRoomValue = roomValue;
+  socket.join(roomValue);
+
+  historyChat(globalRoomValue, globalRoomValue, (error, historico) => {
+    if (error) {
+      console.error('Erro ao recuperar histórico do chat:', error);
+    } else {
+      // Enviar histórico para o cliente que está entrando no chat
+      socket.emit("chatHistory", historico)
+    }
+  });
+
+  socket.broadcast.to(roomValue).emit(
+    "mensagem",
+    formatarMensagem("SISTEMA", `admin entrou no chat!`)
+    );
+  
+});
+
 
   // Lida com mensagens do chat
   socket.on("chatMessage", (msg) => {
@@ -287,12 +352,7 @@ const obterUsuariosDoBanco = (callback) => {
         console.error("Erro ao obter usuários do banco de dados:", error);
         return;
       }
-      const usuarios = dadosBanco.map(usuario => usuario.id);
-    // data com ISO8601
-    const nowDate = Date.now();
-    const date = moment().utc(nowDate);
-    
-    
+      const usuarios = dadosBanco.map(usuario => usuario.id);    
 
     // Obtém o nome de usuário associado ao socket.id
     const nomeUsuario =
@@ -300,9 +360,10 @@ const obterUsuariosDoBanco = (callback) => {
 
     const user = getCurrentUser(socket.id);
     if (user.room === 1){
-      io.to(usuarios).emit("mensagem", formatarMensagem(nomeUsuario, msg));
-
+      historyMsg(msg, globalRoomValue, user.room)
+      io.to(globalRoomValue).emit("mensagem", formatarMensagem(nomeUsuario, msg));
     } else {
+      historyMsg(msg, 1, user.room)
       io.to(user.room).emit("mensagem", formatarMensagem(nomeUsuario, msg));
     }
     });
@@ -311,16 +372,17 @@ const obterUsuariosDoBanco = (callback) => {
   // Lida com desconexões
   socket.on("disconnect", () => {
     const user = userLeave(socket.id)
+    
     // Obtém o nome de usuário associado ao socket.id
     const nomeUsuario =
       usuariosConectados.get(socket.id) || "Usuário Desconhecido";
 
     // Remove o mapeamento do socket.id ao desconectar
     usuariosConectados.delete(socket.id);
-
+    
     // Emite uma mensagem de saída para todos os usuários
     if(user) {
-    io.to(user.room).emit(
+    io.emit(
       "mensagem",
       formatarMensagem("Servidor", `${nomeUsuario} saiu do chat.`)
     )};

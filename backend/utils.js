@@ -20,6 +20,8 @@ function userLeave(id) {
         return users.splice(index, 1)[0];
     }
 }
+
+
 module.exports = {
     userJoin,
     getCurrentUser,

@@ -50,8 +50,12 @@
 
       socket.emit("joinRoom");
       
-      socket.on("roomUsers", (users) => {
-        contatosFrontEnd(users.users)
+      socket.on("roomUsers", ({ users, room }) => {
+        contatosFrontEnd(users, room)
+      })
+      
+      socket.on("chatHistory", (historico) => {
+        mensagemFrontEndHistorico(historico)
       })
 
       // Pega a mensagem do servidor
@@ -75,12 +79,27 @@
           e.target.elements.msg.focus();
         }
       });
-
+      
       //Da output da mensagem para o frontend
-      function contatosFrontEnd(users) {
-         userList.innerHTML = `
-          ${users.map(user => `<aside class="contato1"> ${user} </aside>`).join('')}
-        `
+      function contatosFrontEnd(users, room) {
+        userList.innerHTML = `
+          ${users.map((user, index) => `<div class="contato1" data-room="${room[index]}"><h1>${user}</h1><span></span></div>`).join('')}
+        `;
+      
+        // Adiciona um evento de clique a cada elemento de usuário
+        users.forEach((user, index) => {
+          const userElement = document.querySelector(`.contato1:nth-child(${index + 1})`);
+          if (userElement) {
+            userElement.addEventListener('click', () => handleUserClick(user, room[index]));
+          }
+        });
+      }
+      
+      // Função para lidar com o clique do usuário
+      function handleUserClick(userName, roomValue) {
+        socket.emit("roomClick", userName, roomValue)
+        // Faça o que for necessário com o nome do usuário aqui
+        // Por exemplo, você pode emitir um evento para o servidor, abrir uma janela, etc.
       }
 
       function mensagemFrontEnd(mensagem) {
@@ -98,6 +117,47 @@
 
         scrollParaBaixo();
       }
+
+      function formatarHoraParaAMPM(data) {
+        const horas = data.getHours();
+        const minutos = data.getMinutes();
+        const segundos = data.getSeconds();
+      
+        const ampm = horas >= 12 ? 'pm' : 'am';
+        const horasFormatadas = horas % 12 || 12;
+      
+        return `${horasFormatadas}:${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos} ${ampm}`;
+      }
+
+      function mensagemFrontEndHistorico(historico) {
+        const container = document.getElementById("seguraMensagens");
+        container.innerHTML = "";
+      
+        historico.forEach((mensagem) => {
+          const div = document.createElement("div");
+          div.classList.add("mensagem");
+      
+          let senderName = mensagem.sender_name || "Desconhecido";
+          let mensagemText = mensagem.mensagem || "";
+          let sendDate = mensagem.send_date ? new Date(mensagem.send_date) : new Date();
+
+      const formattedSendDate = formatarHoraParaAMPM(sendDate);
+          div.innerHTML = `
+            <div class="messages">
+              <p class="messages_time">${formattedSendDate}</p>
+              <div class="infoMessages">
+                <p class="user_message">${senderName}</p>
+                <p class="boxMesseges">${mensagemText}</p>
+              </div>
+            </div>
+          `;
+      
+          container.appendChild(div);
+        });
+      
+        scrollParaBaixo();
+      }
+      
 
     </script>
   </body>

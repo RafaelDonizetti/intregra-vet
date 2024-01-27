@@ -8,4 +8,8 @@ function formatarMensagem(nome, text){
     
 }
 
-module.exports = formatarMensagem
+module.exports = formatarMensagem;
+
+function historico (msg, autor_id) {
+
+}
