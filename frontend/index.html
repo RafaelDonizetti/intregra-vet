@@ -1,190 +1,235 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Web site criado com intuíto de conectar médico veterinários com colegas de trabalho e seus pacientes.">
-    <link rel="stylesheet" href="/assets/css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Web site criado com intuíto de conectar médico veterinários com colegas de trabalho e seus pacientes."
+    />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
     <script src="./assets/js/script.js" defer></script>
-    <link rel="shortcut icon" href="assets/img/I.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="assets/img/Logo-integravet.png"
+      type="image/x-icon"
+    />
     <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="./assets/js/cliente.js"></script>
+    <script src="./assets/js/cliente.js" defer></script>
 
     <title>IntegraVet | Home</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <header class="cabecalho">
-        <nav class="cabecalho_nav">
-            <picture class="cabecalho_logo">
-                <img src="assets/img/I.png" alt="Logotipo da marca IntegraVet">
-            </picture>
-            <ul class="cabecalho_lista">
-                <li class="lista_item">
-                    <a href="/">Início</a>
-                </li>
-                <li class="lista_item">
-                    <a href="/quemsomos">Quem somos</a>
-                </li>
-                <li class="lista_item">
-                    <a href="#rodape">Contato</a>
-                </li>
-                <li class="lista_item">
-                    <a href="#">Projetos</a>
-                </li>
-                <li class="lista_item">
-                    <a href="/login">LOGIN</a>
-                </li>
-            </ul>
-            <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
-                <ul id="myDropdown" class="dropdown-content">
-                    <a href="./index" class="item-nav">Ínicio</a>
-                    <a href="./quemsomos">Quem somos</a>
-                    <a href="#rodape" class="item-nav">Contato</a>
-                    <a href="/projetos">Projetos</a>
-                    <a href="./login" class="item-nav">Login</a>
-                </ul>
+      <nav class="cabecalho_nav">
+        <picture class="cabecalho_logo">
+          <img
+            src="assets/img/Logo-integravet.png"
+            alt="Logotipo da marca IntegraVet"
+          />
+        </picture>
+        <div class="cabecalho_lista">
+          <a href="/">Início</a>
+
+          <a href="/quemsomos">Quem somos</a>
+
+          <a href="#rodape">Contato</a>
+
+          <a href="#">Projetos</a>
+
+          <a href="/login" id="loginBtn">LOGIN</a>
+
+          <div id="profileBtn" style="display: none">
+            <button id="userBtn">Nome do Usuário</button>
+            <div id="profileDropdown" style="display: none">
+              <!-- Conteúdo do dropdown aqui -->
+              <a href="/perfil">Perfil</a>
+              <a href="#">Configurações</a>
+              <a href="#" id="logoutBtnInDropdown">Logout</a>
             </div>
-        </nav>
+          </div>
+        </div>
+        <!-- side bar -->
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+            >×</a
+          >
+          <a href="/">Início</a>
+          <a href="/quemsomos">Quem somos</a>
+          <a href="#rodape">Contato</a>
+          <a href="/projetos">Projetos</a>
+          <a href="/login" id="loginBtn-sideBar">LOGIN</a>
+          <a href="#" id="logoutBtn">LOGOUT</a>
+        </div>
+        <div id="main">
+          <button class="openbtn" onclick="openNav()">☰</button>
+        </div>
+      </nav>
     </header>
 
     <main>
-        <section class="apresentacao">
-            <div class="apresentacao_infos">
-                <div class="apresentacao_texto">
-                    <h1 class="titulo_infos" id="titulo_infos">
-                        Fale com um Vet por chat para te ajudar!
-                    </h1>
-                    
-                    <!--Div que fala o nome da pessoa-->
-                    <div id="saudacao"></div>
-                    <div class="subinfos_btn">
-                        <p>Receba orientação veterinária especializada, sem sair de casa e na palma da sua mão.</p>
-                        <a href="./chat" id="chat_btn">CHAT</a>
-                    </div>
-                </div>
-            </div>
+      <section class="apresentacao">
+        <div class="apresentacao_infos">
+          <div class="apresentacao_texto">
+            <h1 class="titulo_infos" id="titulo_infos">
+              Fale com um Vet por chat para te ajudar!
+            </h1>
 
-            <picture>
-                <img src="./assets/img/cao-sorrindo.webp" alt="">
+            <!--Div que fala o nome da pessoa-->
+            <div id="saudacao"></div>
+            <div class="subinfos_btn">
+              <p>
+                Receba orientação veterinária especializada, sem sair de casa e
+                na palma da sua mão.
+              </p>
+              <a href="./chat" id="chat_btn">CHAT</a>
+            </div>
+          </div>
+        </div>
+
+        <picture>
+          <img src="./assets/img/cao-sorrindo.webp" alt="" />
+        </picture>
+      </section>
+
+      <section class="servicos_section">
+        <div class="servicos_titulo">
+          <h1>Cuide do seu pet!</h1>
+          <span></span>
+        </div>
+        <div class="servicos_cards">
+          <div class="card">
+            <picture class="card_icon">
+              <img src="./assets/img/heart-solid.svg" alt="" />
             </picture>
-        </section>
+            <div class="card_infos">
+              <h2>Veterinária</h2>
+              <p>
+                Somos apaixonados por gente e por Pets! Idealizado por
+                profissionais da saúde, médicos e médicos veterinários que
+                acreditam no conceito de saúde única.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <picture class="card_icon"
+              ><img src="./assets/img/clock-regular.svg" alt=""
+            /></picture>
+            <div class="card_infos">
+              <h2>Atendimento 24/7</h2>
+              <p>
+                Veterinários online: 24 horas por dia, 7 dias por semana e você
+                pode acessar de qualquer lugar!
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <picture class="card_icon"
+              ><img src="./assets/img/bandage-solid.svg" alt=""
+            /></picture>
+            <div class="card_infos">
+              <h2>Médicos Veterinários</h2>
+              <p>
+                Aqui, tutores de pets podem respirar aliviados. Possuímos uma
+                equipe Veterinária capacitada em Teleorientação Veterinária para
+                te orientar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <section class="servicos_section">
-            <div class="servicos_titulo">
-                <h1>Cuide do seu pet!</h1>
-                <span></span>
-            </div>
-            <div class="servicos_cards">
-                <div class="card">
-                    <picture class="card_icon">
-                        <img src="./assets/img/heart-solid.svg" alt="">
-                    </picture>
-                    <div class="card_infos">
-                        <h2>Veterinária</h2>
-                        <p>Somos apaixonados por gente e por Pets! Idealizado por profissionais da saúde, médicos e médicos veterinários que acreditam no conceito de saúde única.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <picture class="card_icon"><img src="./assets/img/clock-regular.svg" alt=""></picture>
-                    <div class="card_infos">
-                        <h2>Atendimento 24/7</h2>
-                        <p>Veterinários online: 24 horas por dia, 7 dias por semana e você pode acessar de qualquer lugar!</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <picture class="card_icon"><img src="./assets/img/bandage-solid.svg" alt=""></picture>
-                    <div class="card_infos">
-                        <h2>Médicos Veterinários</h2>
-                        <p>Aqui, tutores de pets podem respirar aliviados. Possuímos uma equipe Veterinária capacitada em Teleorientação Veterinária para te orientar.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="oquefazemos_section">
-            <div class="oquefazemos__textos">
-                <h1>O que fazemos?</h1>
-                <p>Fornecemos orientações veterinárias sobre saúde, bem estar, comportamento, nutrição, criação, ambiente, prevenção de doenças, estilo de vida, e documentações de cães e gatos.</p>
-                <a href="">Contate-nos</a>
-            </div>
-            <div class="oquefazemos__tabela">
-                <h1 class="tabela_titulo">Orientação veterinária:</h1>
-                <ul class="tabela">
-                    <li class="tabela-item">Saúde</li>
-                    <li class="tabela-item">Bem estar</li>
-                    <li class="tabela-item">Comportamento</li>
-                    <li class="tabela-item">Nutrição</li>
-                    <li class="tabela-item">Criação</li>
-                    <li class="tabela-item">Documentação</li>
-                </ul>
-
-            </div>
-            <picture class="oquefazemos__foto">
-                <img src="./assets/img/cao-pug.webp" alt="Foto de um cabecalho da raça pug em um fundo branco">
-            </picture>
-        </section>
+      <section class="oquefazemos_section">
+        <div class="oquefazemos__textos">
+          <h1>O que fazemos?</h1>
+          <p>
+            Fornecemos orientações veterinárias sobre saúde, bem estar,
+            comportamento, nutrição, criação, ambiente, prevenção de doenças,
+            estilo de vida, e documentações de cães e gatos.
+          </p>
+          <a href="">Contate-nos</a>
+        </div>
+        <div class="oquefazemos__tabela">
+          <h1 class="tabela_titulo">Orientação veterinária:</h1>
+          <ul class="tabela">
+            <li class="tabela-item">Saúde</li>
+            <li class="tabela-item">Bem estar</li>
+            <li class="tabela-item">Comportamento</li>
+            <li class="tabela-item">Nutrição</li>
+            <li class="tabela-item">Criação</li>
+            <li class="tabela-item">Documentação</li>
+          </ul>
+        </div>
+        <picture class="oquefazemos__foto">
+          <img
+            src="./assets/img/cao-pug.webp"
+            alt="Foto de um cabecalho da raça pug em um fundo branco"
+          />
+        </picture>
+      </section>
     </main>
 
     <footer class="rodape" id="rodape">
-        <span class="rodape_detalhe"></span>
-        <picture class="cabecalho_logo">
-            <img src="assets/img/I.png" alt="Logotipo da marca IntegraVet">
-        </picture>
-        <article class="rodape_info">
-            <div class="rodape_grupo">
-                <div class="rodape__info_atendimento">
-                    <h2>Atendimento</h2>
-                    <ul>
-                        <a href="">Minha conta</a>
-                        <a href="">Fale com um vet</a>
-                        <a href="">Contato</a>
-                    </ul>
-                </div>
-                <div class="rodape__info_Institucional">
-                    <h2>Institucional</h2>
-                    <ul>
-                        <a href="">Sobre</a>
-                        <a href="">O que fazemos?</a>
-                        <a href="">Orientações</a>
-                        <a href="">Trabalhe conosco</a>
-                    </ul>
-                </div>
-            </div>
-        </article>
-    </footer>
-    
-    <div id="errorModal">
-        <div>
-            <p id="errorMsg"></p>
-            <button id="botaoFechar" onclick="closeModal()">Fechar</button>
+      <span class="rodape_detalhe"></span>
+      <picture class="cabecalho_logo">
+        <img
+          src="assets/img/Logo-integravet.png"
+          alt="Logotipo da marca IntegraVet"
+        />
+      </picture>
+      <article class="rodape_info">
+        <div class="rodape_grupo">
+          <div class="rodape__info_atendimento">
+            <h2>Atendimento</h2>
+            <ul>
+              <a href="">Minha conta</a>
+              <a href="">Fale com um vet</a>
+              <a href="">Contato</a>
+            </ul>
+          </div>
+          <div class="rodape__info_Institucional">
+            <h2>Institucional</h2>
+            <ul>
+              <a href="">Sobre</a>
+              <a href="">O que fazemos?</a>
+              <a href="">Orientações</a>
+              <a href="">Trabalhe conosco</a>
+            </ul>
+          </div>
         </div>
+      </article>
+    </footer>
+
+    <div id="errorModal">
+      <div>
+        <p id="errorMsg"></p>
+        <button id="botaoFechar" onclick="closeModal()">Fechar</button>
+      </div>
     </div>
 
     <script>
-        ScrollReveal().reveal('.apresentacao', {
-            delay: 500,
-            distance: '100px',
-            duration: 1000,
-            origin: 'left'
-        });
-        ScrollReveal().reveal('.card', {
-            delay: 500,
-            distance: '200px',
-            duration: 1000,
-            origin: 'left',
-            interval: 200
-        });
-        ScrollReveal().reveal('.card_icon', {
-            delay: 500,
-            distance: '100px',
-            duration: 1000,
-            origin: 'top',
-            interval: 200
-        })
+      ScrollReveal().reveal(".apresentacao", {
+        delay: 500,
+        distance: "100px",
+        duration: 1000,
+        origin: "left",
+      });
+      ScrollReveal().reveal(".card", {
+        delay: 500,
+        distance: "200px",
+        duration: 1000,
+        origin: "left",
+        interval: 200,
+      });
+      ScrollReveal().reveal(".card_icon", {
+        delay: 500,
+        distance: "100px",
+        duration: 1000,
+        origin: "top",
+        interval: 200,
+      });
     </script>
-</body>
-
+  </body>
 </html>
