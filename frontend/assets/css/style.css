@@ -1,528 +1,443 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Ruda&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Ruda&display=swap");
 * {
-    margin: 0px;
-    padding: 0px;
-    border: none;
-    box-sizing: border-box;
-    text-decoration: none;
-    scroll-behavior: smooth;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  scroll-behavior: smooth;
 }
 
 body {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .rodape_logo {
-    width: 100px;
-    height: 100px;
-    background-color: black;
-    display: block;
+  width: 100px;
+  height: 100px;
+  background-color: black;
+  display: block;
 }
-
-
-/* Header */
-
-.cabecalho {
-    z-index: 999;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    height: 8.125rem;
-    background: #fff;
-}
-
-.cabecalho_logo {
-    width: 150px;
-    height: 150px;
-}
-
-.cabecalho_logo img {
-    max-width: 100%;
-}
-
-.cabecalho_nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 80%;
-}
-
-.cabecalho_lista {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 40px;
-}
-
-.lista_item a {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: #000;
-    background: linear-gradient(#F5BB00, #F5BB00) no-repeat left 1.4rem;
-    background-size: 0 4px;
-    transition: background 0.3s ease;
-}
-
-.lista_item a:hover {
-    background-size: 100% 4px;
-}
-
-.lista_item:nth-child(5) a {
-    padding: 10px 16px;
-    background-color: #F5BB00;
-    border-radius: 4px;
-}
-
-.lista_item button a {
-    color: #574A1E;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    left: -20px;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-}
-
-.dropbtn {
-    color: #574A1E;
-    background-color: #F5BB00;
-    padding: 12px 18px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: 0.4s ease-out;
-    font-size: 1rem;
-}
-
 
 /* conteudo */
 
 main {
-    margin-top: 100px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  margin-top: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 section {
-    width: 85%;
-    min-height: 100vh;
+  width: 85%;
+  min-height: 100vh;
 }
-
 
 /* Hero */
 
 .apresentacao {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    position: relative;
-    justify-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  position: relative;
+  justify-items: center;
 }
 
 .apresentacao_infos {
-    width: 17rem;
-    display: flex;
-    flex-direction: column;
+  width: 17rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .apresentacao_texto {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.apresentacao_texto .titulo_infos{
-    font-size: 36px;
-    text-align: left;
-    font-family: 'Roboto', sans-serif;
+.apresentacao_texto .titulo_infos {
+  font-size: 36px;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
 }
 
-.subinfos_btn{
-    height: 200px;
-    width: 17rem;
-    display: flex;
-    flex-direction: column;
+.subinfos_btn {
+  height: 200px;
+  width: 17rem;
+  display: flex;
+  flex-direction: column;
 }
 
-#saudacao{
-    font-size: 42px;
-    text-align: left;
-    font-family: 'Roboto', sans-serif;
+#saudacao {
+  font-size: 42px;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
 }
 
 .apresentacao_texto p {
-    font-family: 'Ruda', sans-serif;
-    font-size: 16px;
-    color: #797979;
+  font-family: "Ruda", sans-serif;
+  font-size: 16px;
+  color: #797979;
 }
 
 picture {
-    max-width: 50%;
+  max-width: 50%;
 }
 
 .apresentacao_infos a {
-    padding: 20px 110px;
-    background-color: #F5BB00;
-    border-radius: 4px;
-    margin-top: 50px;
-    transition: .3s ease-in-out;
+  padding: 20px 110px;
+  background-color: #f5bb00;
+  border-radius: 4px;
+  margin-top: 50px;
+  transition: 0.3s ease-in-out;
 }
 
 .apresentacao_infos button:active,
 .apresentacao_infos button:hover {
-    transform: translateY(-4px);
-    box-shadow: 1px 22px 10px rgb(195, 195, 195);
+  transform: translateY(-4px);
+  box-shadow: 1px 22px 10px rgb(195, 195, 195);
 }
 
 .apresentacao_texto a {
-    color: #574A1E;
-    font-size: 18px;
-    font-family: 'Roboto', sans-serif;
+  color: #574a1e;
+  font-size: 18px;
+  font-family: "Roboto", sans-serif;
 }
 
 .apresentacao picture img {
-    max-width: 100%;
-    border-radius: 8px;
+  max-width: 100%;
+  border-radius: 8px;
 }
-
 
 /* serviços */
 
 .servicos_section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .servicos_cards {
-    width: 80%;
-    padding: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    gap: 4.6875rem;
-    /* 75px */
-    margin-top: 106px;
-    /* 46px */
+  width: 80%;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4.6875rem;
+  /* 75px */
+  margin-top: 106px;
+  /* 46px */
 }
 
 .servicos_titulo {
-    position: relative;
+  position: relative;
 }
 
 .servicos_titulo span {
-    position: absolute;
-    width: 100px;
-    height: 5px;
-    background-color: #F5BB00;
+  position: absolute;
+  width: 100px;
+  height: 5px;
+  background-color: #f5bb00;
 }
 
 .servicos_titulo h1 {
-    font-size: 40px;
-    font-family: 'Ruda', sans-serif;
+  font-size: 40px;
+  font-family: "Ruda", sans-serif;
 }
 
 .card {
-    width: 18.125rem;
-    height: 350px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-    position: relative;
-    border: 1px solid #AAAAAA;
-    border-radius: 8px;
-    transition: .2s ease-in-out;
+  width: 18.125rem;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid #aaaaaa;
+  border-radius: 8px;
+  transition: 0.2s ease-in-out;
 }
 
 .card:hover {
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 
 .card picture {
-    width: 100px;
-    height: 100px;
-    padding: 20px;
-    border-radius: 50%;
-    background: #F5BB00;
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    top: -50px;
-    left: 95px;
-    border: 1px solid #8E8E8E;
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+  border-radius: 50%;
+  background: #f5bb00;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: -50px;
+  left: 95px;
+  border: 1px solid #8e8e8e;
 }
 
 .card_infos {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    gap: 20px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 20px;
 }
 
 .card_infos h2 {
-    font-size: 24px;
-    font-family: 'Ruda', sans-serif;
-    display: block;
+  font-size: 24px;
+  font-family: "Ruda", sans-serif;
+  display: block;
 }
 
 .card_infos p {
-    font-size: 16px;
-    font-family: 'Ruda', sans-serif;
-    color: #797979;
+  font-size: 16px;
+  font-family: "Ruda", sans-serif;
+  color: #797979;
 }
-
 
 /* O que fazemos - Section */
 
 .oquefazemos_section {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    align-items: center;
-    position: relative;
-    z-index: 3;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  z-index: 3;
 }
 
 .oquefazemos__textos {
-    display: flex;
-    align-items: start;
-    justify-content: center;
-    flex-direction: column;
-    gap: 25px;
-    width: 267px;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+  width: 267px;
 }
 
 .oquefazemos__textos h1 {
-    font-size: 32px;
-    font-family: 'Roboto', sans-serif;
+  font-size: 32px;
+  font-family: "Roboto", sans-serif;
 }
 
 .oquefazemos__textos p {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: #797979;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  color: #797979;
 }
 
 .oquefazemos__textos a {
-    background: #F5BB00;
-    padding: 14px 20%;
-    border-radius: 4px;
-    color: #574A1E;
-    font-size: 20px;
-    font-family: 'Roboto', sans-serif;
+  background: #f5bb00;
+  padding: 14px 20%;
+  border-radius: 4px;
+  color: #574a1e;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
 }
 
 .oquefazemos__tabela {
-    height: 340px;
-    width: 267px;
-    background-color: #F5BB00;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    padding: 30px 20px;
-    color: #574A1E;
-    border-radius: 8px;
+  height: 340px;
+  width: 267px;
+  background-color: #f5bb00;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 30px 20px;
+  color: #574a1e;
+  border-radius: 8px;
 }
 
 .tabela {
-    position: absolute;
-    top: 100px;
-    left: 60px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  position: absolute;
+  top: 100px;
+  left: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .tabela_titulo {
-    font-size: 20px;
-    font-family: 'Ruda', sans-serif;
+  font-size: 20px;
+  font-family: "Ruda", sans-serif;
 }
 
 .tabela-item {
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
 }
 
 .oquefazemos__foto {
-    width: 30%;
-    position: absolute;
-    left: 900px;
-    z-index: -1;
+  width: 30%;
+  position: absolute;
+  left: 900px;
+  z-index: -1;
 }
 
 .oquefazemos__foto img {
-    max-width: 100%;
+  max-width: 100%;
 }
-
 
 /* Roda-pé */
 
 .rodape {
-    height: 30vh;
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    align-items: center;
-    position: relative;
+  height: 30vh;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
 }
 
 .rodape_detalhe {
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: #e2e2e2;
-    top: -5px;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #e2e2e2;
+  top: -5px;
 }
 
 .rodape_info .rodape_grupo {
-    display: flex;
-    gap: 100px;
+  display: flex;
+  gap: 100px;
 }
 
 .rodape__info_atendimento,
 .rodape__info_Institucional {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: "Roboto", sans-serif;
 }
 
 .rodape__info_atendimento ul,
 .rodape__info_Institucional ul {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .rodape__info_atendimento ul a,
 .rodape__info_Institucional ul a {
-    color: #797979;
+  color: #797979;
 }
 
 /* Modal */
-#errorModal{
+#errorModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+#errorModal div {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  max-width: 300px;
+  margin: 100px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#errorModal button {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #574a1e;
+  background: #f5bb00;
+  padding: 10px 10px;
+  border-radius: 0.1565rem;
+}
+
+@media screen and (max-width: 1440px) {
+  .oquefazemos__foto {
+    left: 700px;
+  }
+  .servicos_section {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .oquefazemos__foto {
     display: none;
-    position: fixed; 
-    top: 0; 
-    right: 0; 
-    bottom: 0; 
-    left: 0; 
-    background: rgba(0,0,0,0.5); 
-    z-index: 1000;
-}
-#errorModal div{
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    max-width: 300px;
-    margin: 100px auto; 
-    background: #fff; 
-    padding: 20px; 
-    border-radius: 5px;
-    display: flex;
+  }
+  .servicos_cards {
     flex-direction: column;
-    gap: 20px;
+  }
+  .card picture {
+    width: 100px;
+    left: 95px;
+  }
+  .card img {
+    width: 100%;
+  }
 }
 
-#errorModal button{
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #574A1E;
-    background:#F5BB00;
-    padding: 10px 10px;
-    border-radius: 0.1565rem;
-
+@media screen and (min-width: 769px) {
+  #main {
+    display: none;
+  }
+  picture {
+    display: block;
+  }
 }
 
-@media screen and (max-width:1440px) {
-    .oquefazemos__foto {
-        left: 700px;
-    }
-    .servicos_section {
-        width: 100%;
-    }
+@media screen and (max-width: 768px) {
+  .cabecalho_lista {
+    display: none;
+  }
+  #mySidebar {
+    width: 0;
+  }
+
+  #main {
+    margin-left: 0;
+  }
+  .apresentacao {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .apresentacao_texto {
+    width: 100%;
+  }
+  .apresentacao_texto p {
+    width: inherit;
+    font-size: 24px;
+  }
+  .apresentacao picture,
+  .oquefazemos__foto {
+    display: none;
+  }
+  .oquefazemos_section {
+    flex-direction: column;
+  }
 }
 
-@media screen and (max-width:1024px) {
-    .oquefazemos__foto {
-        display: none;
-    }
-    .servicos_cards {
-        flex-direction: column;
-    }
-    .card picture {
-        width: 100px;
-        left: 95px;
-    }
-    .card img {
-        width: 100%;
-    }
-}
+@media screen and (max-width: 577px) {
+  .cabecalho {
+    justify-content: space-around;
+  }
 
-@media screen and (min-width:769px) {
-    .dropdown {
-        display: none;
-    }
-    picture {
-        display: block;
-    }
-}
-
-@media screen and (max-width:768px) {
-    .cabecalho_lista {
-        display: none;
-    }
-    .apresentacao {
-        display: flex;
-        justify-content: center;
-    }
-    .apresentacao_texto {
-        width: 100%;
-    }
-    .apresentacao_texto p {
-        width: inherit;
-        font-size: 24px
-    }
-    .apresentacao picture,
-    .oquefazemos__foto {
-        display: none;
-    }
-    .oquefazemos_section {
-        flex-direction: column;
-    }
-}
-
-@media screen and (max-width:577px) {
-    .rodape {
-        height: 80vh;
-    }
-    .rodape,
-    .rodape_grupo {
-        flex-direction: column;
-    }
+  .rodape {
+    height: 80vh;
+  }
+  .rodape,
+  .rodape_grupo {
+    flex-direction: column;
+  }
 }

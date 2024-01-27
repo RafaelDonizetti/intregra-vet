@@ -3,18 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Web site criado com intuíto de conectar médico veterinários com colegas de trabalho e seus pacientes."
+    <link rel="stylesheet" href="assets/css/header.css" />
+    <link rel="stylesheet" href="assets/css/perfil.css" />
+    <link
+      rel="shortcut icon"
+      href="assets/img/Logo-integravet.png"
+      type="image/x-icon"
     />
-    <link rel="stylesheet" href="/assets/css/style.css" />
-    <link rel="stylesheet" href="/assets/css/header.css" />
-    <script src="./assets/js/script.js" defer></script>
-    <script src="assets/js/cliente.js" defer></script>
-    <link rel="shortcut icon" href="assets/img/I.png" type="image/x-icon" />
-    <title>Projetos | IntegraVet</title>
+    <script src="./assets/js/cliente.js" defer></script>
+    <title>Perfil | IntegraVet</title>
   </head>
-
   <body>
     <header class="cabecalho">
       <nav class="cabecalho_nav">
@@ -62,5 +60,30 @@
         </div>
       </nav>
     </header>
+
+    <main>
+      <section class="profile-card">
+        <div class="card">
+          <div class="card-infos">
+            <div class="header-card">
+              <h1>Perfil do Usuário</h1>
+              <span class="detalhe"></span>
+              <img src="" id="profileImage" alt="Foto de perfil" />
+            </div>
+            <div class="pessoal-infos_input">
+              <div class="pessoal-infos">
+                <p><strong>Nome:</strong> <span id="profileUserName"></span></p>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+              </div>
+              <div class="input">
+                <input type="file" id="fileInput" accept="image/*" />
+                <button id="uploadButton">Inserir Foto</button>
+              </div>
+            </div>
+          </div>
+          <button class="delete" id="delete-btn">Deletar conta</button>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

@@ -136,6 +136,15 @@ app.get("/login", (req, res) => {
 app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "cadastro.html"));
 });
+
+app.get("/projetos", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "projetos.html"));
+});
+
+app.get("/perfil", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "perfil.html"));
+});
+
 app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
   if (req.userId === 1) {
     res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"));

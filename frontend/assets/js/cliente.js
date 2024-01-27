@@ -42,4 +42,159 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+function hideLoginButtonOnLogin() {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (loginBtn && logoutBtn) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+  }
+}
+
+//caso de login, troca o nome do botão para o nome do usuário
+document.addEventListener("DOMContentLoaded", function () {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    .split("=")[1];
+
+  const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (decodedToken) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+  } else {
+    loginBtn.style.display = "block";
+    logoutBtn.style.display = "none";
+  }
+});
+
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", function () {
+    document.cookie =
+      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/"; // Ajuste o caminho conforme necessário
+  });
+}
+
+//logout function
+function showProfileButton(username) {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const profileBtn = document.getElementById("profileBtn");
+  const userBtn = document.getElementById("userBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+  const logoutBtnInDropdown = document.getElementById("logoutBtnInDropdown");
+
+  if (
+    loginBtn &&
+    logoutBtn &&
+    profileBtn &&
+    userBtn &&
+    profileDropdown &&
+    logoutBtnInDropdown
+  ) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+    profileBtn.style.display = "block";
+    userBtn.innerText = username;
+
+    userBtn.addEventListener("click", function () {
+      if (profileDropdown.style.display === "none") {
+        profileDropdown.style.display = "block";
+      } else {
+        profileDropdown.style.display = "none";
+      }
+    });
+
+    logoutBtnInDropdown.addEventListener("click", function () {
+      document.cookie =
+        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.href = "/"; // Ajuste o caminho conforme necessário
+    });
+  }
+}
+
+//Habilita e desabilita botão de login
+document.addEventListener("DOMContentLoaded", function () {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    .split("=")[1];
+
+  const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const profileBtn = document.getElementById("profileBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+  const loginDrop = document.getElementById("loginBtn-sideBar");
+
+  if (decodedToken) {
+    showProfileButton(decodedToken.userName);
+  } else {
+    if (loginDrop) {
+      loginDrop.style.display = "none";
+    }
+    if (loginBtn) {
+      loginBtn.style.display = "block";
+    } else {
+      logoutBtn.style.display = "none";
+    }
+    if (profileBtn) {
+      profileBtn.style.display = "none";
+    }
+    if (profileDropdown) profileDropdown.style.display = "none";
+  }
+});
+
+// profile.js
+
+document.addEventListener("DOMContentLoaded", function () {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    .split("=")[1];
+
+  const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
+  const profileUserName = document.getElementById("profileUserName");
+  const profileImage = document.getElementById("profileImage");
+  const fileInput = document.getElementById("fileInput");
+  const uploadButton = document.getElementById("uploadButton");
+
+  if (decodedToken && profileUserName) {
+    profileUserName.innerText = decodedToken.userName;
+    // Se você tiver uma URL de foto no token, substitua "decodedToken.photoUrl"
+    // pela chave real que contém a URL da foto em seu objeto de token.
+    // Exemplo: decodedToken.photoUrl
+    profileImage.src =
+      decodedToken.photoUrl ||
+      "caminho-para-sua-foto-padrao/default-avatar.jpg";
+    console.log("URL da foto do token:", decodedToken.photoUrl);
+  }
+
+  // Adiciona um ouvinte de evento para o botão de upload
+  uploadButton.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  // Adiciona um ouvinte de evento para o campo de arquivo (input type="file")
+  fileInput.addEventListener("change", function () {
+    const file = fileInput.files[0];
+    if (file) {
+      // Aqui você pode enviar o arquivo para o servidor ou fazer o que for necessário
+      // para armazenar a foto do perfil do usuário.
+      // Neste exemplo, apenas exibimos a foto localmente.
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profileImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
+
 //Adiciona o nome do usuário no dropdown
