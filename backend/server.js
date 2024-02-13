@@ -11,7 +11,8 @@ const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
-const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils")
+const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils");
+
 
 const app = express();
 //Criando server HTTP
@@ -52,8 +53,6 @@ const values = [mensagem, destiny_id, autor_id];
 connection.query(query, values, (err, results) => {
   if (err) {
     console.error('Erro ao inserir mensagem no banco de dados:', err);
-  } else {
-    console.log('Mensagem inserida com sucesso no banco de dados');
   }
 })
 };
@@ -329,8 +328,18 @@ const obterUsuariosDoBanco = (callback) => {
   );
 };
 
+const apagarHistoricoBanco = (autor_id) => {
+  connection.query(
+    "DELETE FROM historico WHERE autor_id = '?' OR destiny_id = '?' ",
+    [autor_id, autor_id],
+    (error) => {
+      if (error) throw error;
+    }
+  )
+}
 
 let globalRoomValue;
+
 // Lida com os clicks nos contatos
 socket.on("roomClick", (userName, roomValue) => {
   socket.leave(globalRoomValue)
@@ -348,10 +357,13 @@ socket.on("roomClick", (userName, roomValue) => {
 
   socket.broadcast.to(roomValue).emit(
     "mensagem",
-    formatarMensagem("SISTEMA", `admin entrou no chat!`)
+    formatarMensagem("SISTEMA", `Debora entrou no chat!`)
     );
-  
 });
+
+socket.on("deleteHistory", (historico) => {
+  apagarHistoricoBanco(historico)
+})
 
 
   // Lida com mensagens do chat
