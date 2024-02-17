@@ -16,6 +16,13 @@ body {
   background-color: #f0f0f0; /* Cor de fundo */
 }
 
+button {
+  padding: 14px 14px;
+  border-radius: 4px;
+  background: #574a1e;
+  cursor: pointer;
+}
+
 .contatos {
   display: flex;
   flex-direction: column;
@@ -116,12 +123,7 @@ body {
   color: #d8d8d8;
 }
 
-button {
-  padding: 14px 14px;
-  border-radius: 4px;
-  background: #574a1e;
-  cursor: pointer;
-}
+
 
 /* Chat */
 .mensagem {
@@ -153,6 +155,51 @@ button {
   width: 70%;
   word-break: break-all;
 }
+
+
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.modal p {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.modal-btn {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #574a1e;
+  background: #f5bb00;
+  padding: 10px 10px;
+  border-radius: 0.1565rem;
+  cursor: pointer;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+
 
 @media screen and (max-width: 320px) {
   .messagesDiv {

@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
 const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils");
+const { constants } = require("buffer");
 
 
 const app = express();
@@ -90,15 +91,14 @@ app.use(
 // Middleware para verificar o token em cada solicitação
 const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken;
-
   if (!token) {
-    return res.status(401).send("Token não fornecido");
+    return res.status(401).json({ error: "Token não fornecido" });
   }
-
   jwt.verify(token, "seu-segredo-secreto", (err, decoded) => {
     if (err) {
-      return res.status(401).send("Token inválido");
+      return res.status(401).json({ error: "Token inválido" });
     }
+
     nomeUsuario = decoded.userName || "";
     req.userId = decoded.userId;
     req.userName = nomeUsuario;
@@ -145,12 +145,21 @@ app.get("/perfil", (req, res) => {
 });
 
 app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
+  const token = req.cookies.authToken
+
+
   if (req.userId === 1) {
     res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"));
   } else {
     res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
   }
 });
+
+
+app.get("/verify", verifyToken, verifyAdmin, (req, res) => {
+  res.json({});
+});
+
 
 // Rota para inserir usuário
 app.post("/cadastro", (req, res) => {

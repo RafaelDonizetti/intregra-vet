@@ -76,3 +76,6 @@ btnCadastro.addEventListener("click", function (e) {
       showModal("Erro na conexão. Tente novamente mais tarde.");
     });
 });
+
+
+

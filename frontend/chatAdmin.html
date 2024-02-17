@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="assets/css/chat-admin.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat | IntegraVet</title>
-    <script src="./assets/js/cliente.js"></script>
+    <script src="./assets/js/chatmodal.js"></script>
   </head>
   <body>
     <h2 id="room-name"></h2>
@@ -19,10 +19,14 @@
             <a href="/"><img src="./assets/img/back-arrow.svg" alt="" /></a>
             <span class="user_foto"></span>
             <span id="nome"></span>
-            <span id="del">
-              <button id="btnDelete"></button>
-            </span>
           </div>
+            <button id="btnDelete"></button>
+            <div id="deleteModal" class="modal">
+              <p>Tem certeza de que deseja excluir?</p>
+              <button id="confirmDelete" class="modal-btn">Sim</button>
+              <button id="cancelDelete" class="modal-btn" onclick="closeModal()">Cancelar</button>
+            </div>
+            <div id="modalOverlay" class="overlay"></div>
         </nav>
       </header>
       <!-- Área do chat -->
@@ -49,14 +53,16 @@
       }
       const textMessage = document.getElementById("chat-form");
       const socket = io.connect("http://localhost:3000");
-      const btnDelete = document.getElementById("btnDelete")
+      const btnDelete = document.getElementById("confirmDelete")
 
 
       socket.emit("joinRoom");
 
       btnDelete.addEventListener("click", function(){
+        if (roomT) {
         socket.emit("deleteHistory", roomT)
         document.getElementById("seguraMensagens").innerHTML = "";
+        }
       })
 
       socket.on("roomUsers", ({ users, room }) => {
