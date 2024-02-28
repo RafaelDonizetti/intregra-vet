@@ -51,9 +51,14 @@ body {
     display: block;
     width: 30px;
     height: 30px;
-    background-color: black;
+    background-color: white;
     border-radius: 50%;
 }
+
+.user_foto img{
+    max-width: 100%;
+    object-fit: cover;
+  }
 
 .chat_area {
     width: 100%;

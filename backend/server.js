@@ -13,6 +13,7 @@ const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
 const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils");
 const { constants } = require("buffer");
+const { Socket } = require("dgram");
 
 
 const app = express();
@@ -140,7 +141,7 @@ app.get("/projetos", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "projetos.html"));
 });
 
-app.get("/perfil", (req, res) => {
+app.get("/perfil", verifyToken, (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "perfil.html"));
 });
 
@@ -216,8 +217,9 @@ app.post("/login", (req, res) => {
       if (isMatch) {
         const userId = results[0].id;
         const userName = results[0].nome;
-        const token = jwt.sign({ userId, userName }, "seu-segredo-secreto", {
-          expiresIn: "7d",
+        const userEmail = email
+        const token = jwt.sign({ userId, userName, userEmail}, "seu-segredo-secreto", {
+          expiresIn: "7d"
         });
 
         // Atualização do token no banco de dados
@@ -247,6 +249,7 @@ io.on("connection", (socket) => {
   socket.emit("mensagem", formatarMensagem("SISTEMA", "Bem-Vindo"));
 
   // Obtém o token do cabeçalho da solicitação
+  
   const token = socket.handshake.headers.cookie
     .split("; ")
     .find((row) => row.startsWith("authToken="))
@@ -347,6 +350,21 @@ const apagarHistoricoBanco = (autor_id) => {
   )
 }
 
+
+
+const apagarUsuario = (user) => {
+  connection.query(
+    "DELETE FROM usuarios WHERE email = ? ",
+    [user],
+    (error) => {
+      if (error) throw error;
+    }
+  )
+}
+ 
+
+
+
 let globalRoomValue;
 
 // Lida com os clicks nos contatos
@@ -372,6 +390,11 @@ socket.on("roomClick", (userName, roomValue) => {
 
 socket.on("deleteHistory", (historico) => {
   apagarHistoricoBanco(historico)
+})
+
+
+socket.on("deleteUser", (user) => {
+  apagarUsuario(user)
 })
 
 
