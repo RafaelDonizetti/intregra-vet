@@ -1,8 +1,10 @@
 // Obtendo o valor do cookie
 const cookieValue = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("authToken="))
-  .split("=")[1];
+  ? document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("authToken="))
+      ?.split("=")[1]
+  : null;
 
 // Decodificando o token JWT com suporte a caracteres especiais
 function base64UrlDecode(str) {
@@ -42,89 +44,94 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function hideLoginButtonOnLogin() {
-  const loginBtn = document.getElementById("loginBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  if (loginBtn && logoutBtn) {
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "block";
-  }
-}
-
-//caso de login, troca o nome do botão para o nome do usuário
 document.addEventListener("DOMContentLoaded", function () {
   const cookieValue = document.cookie
     .split("; ")
     .find((row) => row.startsWith("authToken="))
-    .split("=")[1];
+    ?.split("=")[1];
 
   const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
-  const loginBtn = document.getElementById("loginBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
+  console.log("Decoded Token:", decodedToken); // Adiciona este log para verificar se o token está sendo decodificado corretamente
 
   if (decodedToken) {
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "block";
+    console.log("User is logged in. Username:", decodedToken.userName);
+    toggleLoginLogoutButton(decodedToken.userName);
   } else {
-    loginBtn.style.display = "block";
-    logoutBtn.style.display = "none";
+    console.log("User is not logged in.");
+    toggleLoginLogoutButton(null);
   }
 });
 
-const logoutBtn = document.getElementById("logoutBtn");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", function () {
-    document.cookie =
-      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/"; // Ajuste o caminho conforme necessário
-  });
+function toggleLoginLogoutButton(username) {
+  console.log("Toggling login/logout button. Username:", username);
+  // Restante do código da função...
 }
 
-//logout function
-function showProfileButton(username) {
+function toggleLoginLogoutButton(username) {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const profileBtn = document.getElementById("profileBtn");
   const userBtn = document.getElementById("userBtn");
   const profileDropdown = document.getElementById("profileDropdown");
   const logoutBtnInDropdown = document.getElementById("logoutBtnInDropdown");
+  const loginBtnSideBar = document.getElementById("loginBtn-sideBar");
 
-  if (
-    loginBtn &&
-    logoutBtn &&
-    profileBtn &&
-    userBtn &&
-    profileDropdown &&
-    logoutBtnInDropdown
-  ) {
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "block";
-    profileBtn.style.display = "block";
-    userBtn.innerText = username;
+  console.log("Toggling login/logout button. Username:", username);
 
-    userBtn.addEventListener("click", function () {
-      if (profileDropdown.style.display === "none") {
-        profileDropdown.style.display = "block";
-      } else {
-        profileDropdown.style.display = "none";
+  if (logoutBtn && logoutBtnInDropdown) {
+    if (username) {
+      // Se o usuário estiver logado, exibe os botões relacionados ao perfil e oculta o de login
+      if (loginBtn && loginBtnSideBar) {
+        loginBtn.style.display = "none";
+        loginBtnSideBar.style.display = "none";
       }
-    });
+      logoutBtn.style.display = "block";
+      profileBtn.style.display = "block";
+      userBtn.innerText = username;
 
-    logoutBtnInDropdown.addEventListener("click", function () {
-      document.cookie =
-        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      window.location.href = "/"; // Ajuste o caminho conforme necessário
-    });
+      // Adiciona evento para mostrar/ocultar dropdown do perfil
+      userBtn.addEventListener("click", function () {
+        if (profileDropdown.style.display === "none") {
+          profileDropdown.style.display = "block";
+        } else {
+          profileDropdown.style.display = "none";
+        }
+      });
+
+      // Adiciona evento de logout para botão de logout
+      logoutBtn.addEventListener("click", function () {
+        document.cookie =
+          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/"; // Ajuste o caminho conforme necessário
+      });
+
+      // Adiciona evento de logout para botão de logout no dropdown
+      logoutBtnInDropdown.addEventListener("click", function () {
+        document.cookie =
+          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/"; // Ajuste o caminho conforme necessário
+      });
+    } else {
+      // Se o usuário não estiver logado, exibe o botão de login e oculta os relacionados ao perfil
+      if (loginBtn && loginBtnSideBar) {
+        loginBtn.style.display = "block";
+        loginBtnSideBar.style.display = "block";
+      }
+      logoutBtn.style.display = "none";
+      profileBtn.style.display = "none";
+      if (profileDropdown) profileDropdown.style.display = "none";
+    }
   }
 }
 
-//Habilita e desabilita botão de login
+//Troca a escrita do botão de login para o nome do user
 document.addEventListener("DOMContentLoaded", function () {
   const cookieValue = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("authToken="))
-    .split("=")[1];
+    ? document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        ?.split("=")[1]
+    : null;
 
   const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
   const loginBtn = document.getElementById("loginBtn");
@@ -151,13 +158,47 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+//botão de login some se estiver logado, e caso esteja deslogado apareça apenas o botão de login
+document.addEventListener("DOMContentLoaded", function () {
+  const cookieValue = document.cookie
+    ? document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        ?.split("=")[1]
+    : null;
+
+  const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
+  const loginBtnSideBar = document.getElementById("loginBtn-sideBar");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (decodedToken) {
+    // Se o usuário estiver logado, exibe o botão de logout e oculta o de login
+    if (loginBtnSideBar) {
+      loginBtnSideBar.style.display = "none";
+    }
+    if (logoutBtn) {
+      logoutBtn.style.display = "block";
+    }
+  } else {
+    // Se o usuário não estiver logado, exibe o botão de login e oculta o de logout
+    if (loginBtnSideBar) {
+      loginBtnSideBar.style.display = "block";
+    }
+    if (logoutBtn) {
+      logoutBtn.style.display = "none";
+    }
+  }
+});
+
 // profile.js
 
 document.addEventListener("DOMContentLoaded", function () {
   const cookieValue = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("authToken="))
-    .split("=")[1];
+    ? document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        ?.split("=")[1]
+    : null;
 
   const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
   const profileUserName = document.getElementById("profileUserName");
@@ -196,5 +237,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-
-//Adiciona o nome do usuário no dropdown
