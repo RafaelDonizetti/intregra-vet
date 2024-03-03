@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Adiciona um evento de clique ao botão
     const btnDeletes = document.getElementById("btnDelete");
     btnDeletes.addEventListener("click", function () {
-        showModal("Tem certeza de que deseja excluir?");
+        showModal("Tem certeza de que deseja excluir o histórico dessa conversa?");
     });
     
     // Adiciona eventos de clique aos botões dentro do modal
