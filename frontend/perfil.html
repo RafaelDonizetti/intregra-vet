@@ -11,7 +11,9 @@
       href="assets/img/Logo-integravet.png"
       type="image/x-icon"
     />
-    <script src="./assets/js/cliente.js" defer></script>
+    <script src="./assets/js/cliente.js"></script>
+    <script src="./assets/js/profilemodal.js"></script>
+      
     <title>Perfil | IntegraVet</title>
   </head>
   <body>
@@ -76,15 +78,44 @@
                 <p><strong>Nome:</strong> <span id="profileUserName"></span></p>
                 <p><strong>Email:</strong> <span id="profileEmail"></span></p>
               </div>
-              <div class="input">
-                <input type="file" id="fileInput" accept="image/*" />
+              <!--
+                <div class="input">
+                <input type="file" id="fileInput" accept="image/*">
                 <button id="uploadButton">Inserir Foto</button>
               </div>
+              !-->
             </div>
           </div>
-          <button class="delete" id="delete-btn">Deletar conta</button>
+          
+          <button class="delete" id="btnDelete">EXCLUIR CONTA</button>
+            <div id="deleteModal" class="modal">
+              <p>Tem certeza de que deseja excluir?</p>
+              <button id="confirmDelete" class="modal-btn">Sim</button>
+              <button id="cancelDelete" class="modal-btn" onclick="closeModal()">Cancelar</button>
+            </div>
+            <div id="modalOverlay" class="overlay"></div>
         </div>
       </section>
     </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      function deleteCookie(cookieName) {
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        const btnDelete = document.getElementById("confirmDelete")
+        const email = document.getElementById("profileEmail")
+         user = email.innerText
+         const socket = io.connect("http://localhost:3000");
+
+         btnDelete.addEventListener("click", function(){ 
+          socket.emit("deleteUser", user);
+          deleteCookie("authToken")
+          setTimeout(function() {
+            window.location.href = "/";
+          }, 500); // Atraso de 1 segundo 
+        })
+     })
+    </script>
   </body>
 </html>

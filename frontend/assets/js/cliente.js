@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const decodedToken = decodeJwt(cookieValue);
   const textoSaudacao = document.getElementById("titulo_infos");
   const nome = decodedToken.userName;
+  const email = decodedToken.userEmail;
   // Faz a mensagem na tela inicial a depender do token
   const saudacao = document.getElementById("saudacao");
 
@@ -202,21 +203,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const decodedToken = cookieValue ? decodeJwt(cookieValue) : null;
   const profileUserName = document.getElementById("profileUserName");
+  const profileUserEmail = document.getElementById("profileEmail")
   const profileImage = document.getElementById("profileImage");
+  const profileImageAdm = document.getElementById("profileImageAdm")
   const fileInput = document.getElementById("fileInput");
   const uploadButton = document.getElementById("uploadButton");
 
   if (decodedToken && profileUserName) {
     profileUserName.innerText = decodedToken.userName;
-    // Se você tiver uma URL de foto no token, substitua "decodedToken.photoUrl"
-    // pela chave real que contém a URL da foto em seu objeto de token.
-    // Exemplo: decodedToken.photoUrl
-    profileImage.src =
-      decodedToken.photoUrl ||
-      "caminho-para-sua-foto-padrao/default-avatar.jpg";
-    console.log("URL da foto do token:", decodedToken.photoUrl);
+    profileUserEmail.innerText = decodedToken.userEmail;
   }
 
+  if(profileImage) {
+  profileImage.src = "assets/img/userPadrao.png";
+  }
+  // Trocar o caminho das fotos
+  if (profileImageAdm) {
+  profileImageAdm.src = "assets/img/userPadrao.png";
+  }
   // Adiciona um ouvinte de evento para o botão de upload
   uploadButton.addEventListener("click", function () {
     fileInput.click();
@@ -232,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
       reader.onload = function (e) {
         profileImage.src = e.target.result;
+        profileImageAdm.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }

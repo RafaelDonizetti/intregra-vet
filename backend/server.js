@@ -11,7 +11,10 @@ const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const formatarMensagem = require("../frontend/assets/js/mensagens");
 const moment = require("moment");
-const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils")
+const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils");
+const { constants } = require("buffer");
+const { Socket } = require("dgram");
+
 
 const app = express();
 //Criando server HTTP
@@ -52,8 +55,6 @@ const values = [mensagem, destiny_id, autor_id];
 connection.query(query, values, (err, results) => {
   if (err) {
     console.error('Erro ao inserir mensagem no banco de dados:', err);
-  } else {
-    console.log('Mensagem inserida com sucesso no banco de dados');
   }
 })
 };
@@ -91,15 +92,14 @@ app.use(
 // Middleware para verificar o token em cada solicitação
 const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken;
-
   if (!token) {
-    return res.status(401).send("Token não fornecido");
+    return res.status(401).json({ error: "Token não fornecido" });
   }
-
   jwt.verify(token, "seu-segredo-secreto", (err, decoded) => {
     if (err) {
-      return res.status(401).send("Token inválido");
+      return res.status(401).json({ error: "Token inválido" });
     }
+
     nomeUsuario = decoded.userName || "";
     req.userId = decoded.userId;
     req.userName = nomeUsuario;
@@ -141,17 +141,26 @@ app.get("/projetos", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "projetos.html"));
 });
 
-app.get("/perfil", (req, res) => {
+app.get("/perfil", verifyToken, (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "perfil.html"));
 });
 
 app.get("/chat", verifyToken, verifyAdmin, (req, res) => {
+  const token = req.cookies.authToken
+
+
   if (req.userId === 1) {
     res.sendFile(path.join(__dirname, "..", "frontend", "chatAdmin.html"));
   } else {
     res.sendFile(path.join(__dirname, "..", "frontend", "chat.html"));
   }
 });
+
+
+app.get("/verify", verifyToken, verifyAdmin, (req, res) => {
+  res.json({});
+});
+
 
 // Rota para inserir usuário
 app.post("/cadastro", (req, res) => {
@@ -208,8 +217,9 @@ app.post("/login", (req, res) => {
       if (isMatch) {
         const userId = results[0].id;
         const userName = results[0].nome;
-        const token = jwt.sign({ userId, userName }, "seu-segredo-secreto", {
-          expiresIn: "7d",
+        const userEmail = email
+        const token = jwt.sign({ userId, userName, userEmail}, "seu-segredo-secreto", {
+          expiresIn: "7d"
         });
 
         // Atualização do token no banco de dados
@@ -239,6 +249,7 @@ io.on("connection", (socket) => {
   socket.emit("mensagem", formatarMensagem("SISTEMA", "Bem-Vindo"));
 
   // Obtém o token do cabeçalho da solicitação
+  
   const token = socket.handshake.headers.cookie
     .split("; ")
     .find((row) => row.startsWith("authToken="))
@@ -329,8 +340,33 @@ const obterUsuariosDoBanco = (callback) => {
   );
 };
 
+const apagarHistoricoBanco = (autor_id) => {
+  connection.query(
+    "DELETE FROM historico WHERE autor_id = '?' OR destiny_id = '?' ",
+    [autor_id, autor_id],
+    (error) => {
+      if (error) throw error;
+    }
+  )
+}
+
+
+
+const apagarUsuario = (user) => {
+  connection.query(
+    "DELETE FROM usuarios WHERE email = ? ",
+    [user],
+    (error) => {
+      if (error) throw error;
+    }
+  )
+}
+ 
+
+
 
 let globalRoomValue;
+
 // Lida com os clicks nos contatos
 socket.on("roomClick", (userName, roomValue) => {
   socket.leave(globalRoomValue)
@@ -348,10 +384,18 @@ socket.on("roomClick", (userName, roomValue) => {
 
   socket.broadcast.to(roomValue).emit(
     "mensagem",
-    formatarMensagem("SISTEMA", `admin entrou no chat!`)
+    formatarMensagem("SISTEMA", `Debora entrou no chat!`)
     );
-  
 });
+
+socket.on("deleteHistory", (historico) => {
+  apagarHistoricoBanco(historico)
+})
+
+
+socket.on("deleteUser", (user) => {
+  apagarUsuario(user)
+})
 
 
   // Lida com mensagens do chat
