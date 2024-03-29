@@ -26,7 +26,9 @@ body {
   background-color: #f5bb00;
   position: relative;
 }
-
+.contato1{
+  cursor: pointer;
+}
 .contato1 span {
   position: absolute;
   height: 2px;
