@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="assets/css/chat-admin.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat | IntegraVet</title>
+    <script src="./assets/js/chatmodal.js"></script>
     <script src="./assets/js/cliente.js"></script>
   </head>
   <body>
@@ -17,9 +18,18 @@
         <nav>
           <div class="info__user">
             <a href="/"><img src="./assets/img/back-arrow.svg" alt="" /></a>
-            <span class="user_foto"></span>
+            <span class="user_foto">
+              <img src="/" alt="" id="profileImageAdm">
+            </span>
             <span id="nome"></span>
           </div>
+            <button id="btnDelete"></button>
+            <div id="deleteModal" class="modal">
+              <p>Tem certeza de que deseja excluir?</p>
+              <button id="confirmDelete" class="modal-btn">Sim</button>
+              <button id="cancelDelete" class="modal-btn" onclick="closeModal()">Cancelar</button>
+            </div>
+            <div id="modalOverlay" class="overlay"></div>
         </nav>
       </header>
       <!-- Área do chat -->
@@ -45,11 +55,19 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }
       const textMessage = document.getElementById("chat-form");
-      const socket = io.connect("http://localhost:3000");
+      const socket = io.connect("http://localhost:3000/");
+      const btnDelete = document.getElementById("confirmDelete")
 
 
       socket.emit("joinRoom");
-      
+
+      btnDelete.addEventListener("click", function(){
+        if (roomT) {
+        socket.emit("deleteHistory", roomT)
+        document.getElementById("seguraMensagens").innerHTML = "";
+        }
+      })
+
       socket.on("roomUsers", ({ users, room }) => {
         contatosFrontEnd(users, room)
       })
@@ -94,10 +112,11 @@
           }
         });
       }
-      
+      let roomT
       // Função para lidar com o clique do usuário
       function handleUserClick(userName, roomValue) {
         socket.emit("roomClick", userName, roomValue)
+        roomT = roomValue
         // Faça o que for necessário com o nome do usuário aqui
         // Por exemplo, você pode emitir um evento para o servidor, abrir uma janela, etc.
       }
@@ -119,16 +138,14 @@
       }
 
       function formatarHoraParaAMPM(data) {
-        const horas = data.getHours();
-        const minutos = data.getMinutes();
-        const segundos = data.getSeconds();
+        const options = { timeZone: 'America/Sao_Paulo', hour12: true, hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        const formattedDate = data.toLocaleString('en-US', options);
       
-        const ampm = horas >= 12 ? 'pm' : 'am';
-        const horasFormatadas = horas % 12 || 12;
-      
-        return `${horasFormatadas}:${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos} ${ampm}`;
+        return formattedDate;
       }
-
+      
+      // Restante do código...
+      
       function mensagemFrontEndHistorico(historico) {
         const container = document.getElementById("seguraMensagens");
         container.innerHTML = "";
@@ -140,8 +157,8 @@
           let senderName = mensagem.sender_name || "Desconhecido";
           let mensagemText = mensagem.mensagem || "";
           let sendDate = mensagem.send_date ? new Date(mensagem.send_date) : new Date();
-
-      const formattedSendDate = formatarHoraParaAMPM(sendDate);
+      
+          const formattedSendDate = formatarHoraParaAMPM(sendDate);
           div.innerHTML = `
             <div class="messages">
               <p class="messages_time">${formattedSendDate}</p>
@@ -157,7 +174,6 @@
       
         scrollParaBaixo();
       }
-      
 
     </script>
   </body>

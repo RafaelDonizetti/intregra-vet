@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat | IntegraVet</title>
     <script src="./assets/js/cliente.js"></script>
+
   </head>
   <body>
     <section class="section_chat">
@@ -13,7 +14,9 @@
         <nav>
           <div class="info__user">
             <a href="/"><img src="./assets/img/back-arrow.svg" alt="" /></a>
-            <span class="user_foto"></span>
+            <span class="user_foto">
+              <img src="/" alt="" id="profileImage">
+            </span>
             <span id="nome"></span>
           </div>
         </nav>
@@ -39,7 +42,8 @@
       }
 
       const textMessage = document.getElementById("chat-form");
-      const socket = io.connect("http://localhost:3000");
+      const socket = io.connect("http://localhost:3000/");
+      
       
       socket.emit("joinRoom");
       
@@ -89,18 +93,16 @@
       }
 
       function formatarHoraParaAMPM(data) {
-        const horas = data.getHours();
-        const minutos = data.getMinutes();
-        const segundos = data.getSeconds();
+        const options = { timeZone: 'America/Sao_Paulo', hour12: true, hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        const formattedDate = data.toLocaleString('en-US', options);
       
-        const ampm = horas >= 12 ? 'pm' : 'am';
-        const horasFormatadas = horas % 12 || 12;
-      
-        return `${horasFormatadas}:${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos} ${ampm}`;
+        return formattedDate;
       }
-
+      
       function mensagemFrontEndHistorico(historico) {
         const container = document.getElementById("seguraMensagens");
+        container.innerHTML = "";
+      
         historico.forEach((mensagem) => {
           const div = document.createElement("div");
           div.classList.add("mensagem");
@@ -108,8 +110,8 @@
           let senderName = mensagem.sender_name || "Desconhecido";
           let mensagemText = mensagem.mensagem || "";
           let sendDate = mensagem.send_date ? new Date(mensagem.send_date) : new Date();
-
-      const formattedSendDate = formatarHoraParaAMPM(sendDate);
+      
+          const formattedSendDate = formatarHoraParaAMPM(sendDate);
           div.innerHTML = `
             <div class="messages">
               <p class="messages_time">${formattedSendDate}</p>
