@@ -17,3 +17,5 @@ Bem-vindo ao repositório oficial do IntegraVet, um projeto desenvolvido em parc
 2. **Perfil do Veterinário**: Cada veterinário possui um perfil personalizado que inclui informações relevantes, como especializações, horário de atendimento e avaliações de clientes anteriores.
 
 3. **Chat próprio para o administrador**: O administrador terá uma chat próprio que contará com lista de contato a esquerda podem ver as mensagem enviadas e recebidas dos clientes.
+
+![image](https://github.com/user-attachments/assets/a4216552-b716-4868-98da-610bffd505fa)
