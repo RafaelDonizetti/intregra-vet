@@ -24,7 +24,13 @@ const server = http.createServer(app);
 app.use(cookieParser());
 
 //Inicando o Socket.io
-const io = socketIo(server);
+//Inicando o Socket.io
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // Permite todas as origens, ideal para começar
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 
@@ -442,6 +448,7 @@ socket.on("deleteUser", (user) => {
   });
 });
 
-server.listen(3000, (req) => {
-  console.log("Servidor rodando na porta 3000");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

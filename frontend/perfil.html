@@ -106,7 +106,7 @@
         const btnDelete = document.getElementById("confirmDelete")
         const email = document.getElementById("profileEmail")
          user = email.innerText
-         const socket = io.connect("http://localhost:3000");
+         const socket = io();
 
          btnDelete.addEventListener("click", function(){ 
           socket.emit("deleteUser", user);
