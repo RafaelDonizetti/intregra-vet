@@ -34,12 +34,15 @@ const io = socketIo(server, {
 
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 
-// Conexão MySQL
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  port: 4000, // Especificar a porta é uma boa prática
+  ssl: {
+    ca: fs.readFileSync(path.join(__dirname, 'isrgrootx1.pem'))
+  }
 });
 
 connection.connect((err) => {
