@@ -414,13 +414,14 @@ socket.on("deleteUser", (user) => {
         console.error("Erro ao obter usuários do banco de dados:", error);
         return;
       }
-      const usuarios = dadosBanco.map(usuario => usuario.id);    
-
+      const user = getCurrentUser(socket.id);  
+      if (!user) {
+        console.log(`Mensagem ignorada do socket ${socket.id} porque o usuário não está em uma sala.`);
+        return;
+      }
     // Obtém o nome de usuário associado ao socket.id
     const nomeUsuario =
       usuariosConectados.get(socket.id) || "Usuário Desconhecido";
-
-    const user = getCurrentUser(socket.id);
     if (user.room === 1){
       historyMsg(msg, globalRoomValue, user.room)
       io.to(globalRoomValue).emit("mensagem", formatarMensagem(nomeUsuario, msg));
