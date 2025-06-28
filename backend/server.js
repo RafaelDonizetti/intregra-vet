@@ -14,7 +14,7 @@ const moment = require("moment");
 const {userJoin, getCurrentUser, getRoomUsers, userLeave } = require("../backend/utils");
 const { constants } = require("buffer");
 const { Socket } = require("dgram");
-
+const fs = require('fs');
 
 const app = express();
 //Criando server HTTP
@@ -41,7 +41,7 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    "rejectUnauthorized": true
+    ca: fs.readFileSync(path.join(__dirname, 'ca.pem'))
   }
 });
 
